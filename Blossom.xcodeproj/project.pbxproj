@@ -1,0 +1,606 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C1CFC8802CC069BE007F0CF9 /* Daemon.m in Sources */ = {isa = PBXBuildFile; fileRef = C1CFC87F2CC069BE007F0CF9 /* Daemon.m */; };
+		C1D0B90E2CC0336600F3F5E4 /* build.sh in Resources */ = {isa = PBXBuildFile; fileRef = C1D0B90D2CC0336600F3F5E4 /* build.sh */; };
+		C1D0B9132CC0371100F3F5E4 /* Wallpaper.m in Sources */ = {isa = PBXBuildFile; fileRef = C1D0B9122CC0371100F3F5E4 /* Wallpaper.m */; };
+		C1D0B9152CC0471B00F3F5E4 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C1D0B9142CC0471B00F3F5E4 /* README.md */; };
+		C1D0B9172CC051CA00F3F5E4 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C1D0B9162CC051C900F3F5E4 /* icon.png */; };
+		C1D0B91B2CC0558E00F3F5E4 /* BlossomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D0B91A2CC0558E00F3F5E4 /* BlossomView.swift */; };
+		C1D0B91D2CC0567100F3F5E4 /* BlossomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D0B91C2CC0567100F3F5E4 /* BlossomViewController.swift */; };
+		CC711D112B5BF551007235A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC711D102B5BF551007235A6 /* Assets.xcassets */; };
+		CC711D4A2B5BF5C6007235A6 /* HUDHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC711D1E2B5BF5C6007235A6 /* HUDHelper.mm */; };
+		CC711D4B2B5BF5C6007235A6 /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC711D1F2B5BF5C6007235A6 /* RootViewController.mm */; };
+		CC711D4C2B5BF5C6007235A6 /* HUDMainWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC711D202B5BF5C6007235A6 /* HUDMainWindow.mm */; };
+		CC711D4D2B5BF5C6007235A6 /* MainApplicationDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC711D222B5BF5C6007235A6 /* MainApplicationDelegate.mm */; };
+		CC711D4E2B5BF5C6007235A6 /* HUDMainApplicationDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC711D272B5BF5C6007235A6 /* HUDMainApplicationDelegate.mm */; };
+		CC711D5F2B5BF5C6007235A6 /* MainApplication.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC711D422B5BF5C6007235A6 /* MainApplication.mm */; };
+		CC711D602B5BF5C6007235A6 /* HUDRootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC711D442B5BF5C6007235A6 /* HUDRootViewController.mm */; };
+		CC711D612B5BF5C6007235A6 /* HUDMainApplication.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC711D452B5BF5C6007235A6 /* HUDMainApplication.mm */; };
+		CC711D642B5BF5C6007235A6 /* HUDApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC711D482B5BF5C6007235A6 /* HUDApp.mm */; };
+		CC711D852B5BFCC4007235A6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CC711D872B5BFCC4007235A6 /* Localizable.strings */; };
+		CC711D8C2B5BFD50007235A6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CC711D8E2B5BFD50007235A6 /* InfoPlist.strings */; };
+		CC711D982B5BFF2F007235A6 /* GraphicsServices.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC711D952B5BFF2F007235A6 /* GraphicsServices.tbd */; };
+		CC711D992B5BFF2F007235A6 /* SpringBoardServices.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC711D962B5BFF2F007235A6 /* SpringBoardServices.tbd */; };
+		CC711D9A2B5BFF2F007235A6 /* BackBoardServices.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC711D972B5BFF2F007235A6 /* BackBoardServices.tbd */; };
+		CC711D9E2B5C0081007235A6 /* AssertionServices.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC711D9D2B5C0081007235A6 /* AssertionServices.tbd */; };
+		CC8DDA9A2B6631DC001C7C9E /* AppIntents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC8DDA982B66318E001C7C9E /* AppIntents.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		CC9130A32B616C18006E3280 /* HUDBackdropView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC9130A22B616C18006E3280 /* HUDBackdropView.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C1CFC87E2CC069AA007F0CF9 /* Daemon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Daemon.h; sourceTree = "<group>"; };
+		C1CFC87F2CC069BE007F0CF9 /* Daemon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Daemon.m; sourceTree = "<group>"; };
+		C1CFC8822CC07C5E007F0CF9 /* NSUserDefaults+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+Private.h"; sourceTree = "<group>"; };
+		C1D0B90D2CC0336600F3F5E4 /* build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
+		C1D0B9112CC0370700F3F5E4 /* Wallpaper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Wallpaper.h; sourceTree = "<group>"; };
+		C1D0B9122CC0371100F3F5E4 /* Wallpaper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Wallpaper.m; sourceTree = "<group>"; };
+		C1D0B9142CC0471B00F3F5E4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		C1D0B9162CC051C900F3F5E4 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		C1D0B91A2CC0558E00F3F5E4 /* BlossomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlossomView.swift; sourceTree = "<group>"; };
+		C1D0B91C2CC0567100F3F5E4 /* BlossomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlossomViewController.swift; sourceTree = "<group>"; };
+		CC711D012B5BF550007235A6 /* Blossom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blossom.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC711D102B5BF551007235A6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CC711D1E2B5BF5C6007235A6 /* HUDHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HUDHelper.mm; sourceTree = "<group>"; };
+		CC711D1F2B5BF5C6007235A6 /* RootViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RootViewController.mm; sourceTree = "<group>"; };
+		CC711D202B5BF5C6007235A6 /* HUDMainWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HUDMainWindow.mm; sourceTree = "<group>"; };
+		CC711D222B5BF5C6007235A6 /* MainApplicationDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MainApplicationDelegate.mm; sourceTree = "<group>"; };
+		CC711D242B5BF5C6007235A6 /* MainApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainApplication.h; sourceTree = "<group>"; };
+		CC711D252B5BF5C6007235A6 /* HUDRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDRootViewController.h; sourceTree = "<group>"; };
+		CC711D262B5BF5C6007235A6 /* MainApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainApplicationDelegate.h; sourceTree = "<group>"; };
+		CC711D272B5BF5C6007235A6 /* HUDMainApplicationDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HUDMainApplicationDelegate.mm; sourceTree = "<group>"; };
+		CC711D282B5BF5C6007235A6 /* HUDMainApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDMainApplication.h; sourceTree = "<group>"; };
+		CC711D3E2B5BF5C6007235A6 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		CC711D402B5BF5C6007235A6 /* HUDMainApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDMainApplicationDelegate.h; sourceTree = "<group>"; };
+		CC711D412B5BF5C6007235A6 /* HUDMainWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDMainWindow.h; sourceTree = "<group>"; };
+		CC711D422B5BF5C6007235A6 /* MainApplication.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MainApplication.mm; sourceTree = "<group>"; };
+		CC711D432B5BF5C6007235A6 /* HUDHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDHelper.h; sourceTree = "<group>"; };
+		CC711D442B5BF5C6007235A6 /* HUDRootViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HUDRootViewController.mm; sourceTree = "<group>"; };
+		CC711D452B5BF5C6007235A6 /* HUDMainApplication.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HUDMainApplication.mm; sourceTree = "<group>"; };
+		CC711D482B5BF5C6007235A6 /* HUDApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HUDApp.mm; sourceTree = "<group>"; };
+		CC711D692B5BF6B7007235A6 /* UIApplication+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+Private.h"; sourceTree = "<group>"; };
+		CC711D6B2B5BF6B7007235A6 /* LSApplicationProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSApplicationProxy.h; sourceTree = "<group>"; };
+		CC711D6C2B5BF6B7007235A6 /* libproc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libproc.h; sourceTree = "<group>"; };
+		CC711D6F2B5BF6B7007235A6 /* SpringBoardServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpringBoardServices.h; sourceTree = "<group>"; };
+		CC711D702B5BF6B7007235A6 /* pac_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pac_helper.h; sourceTree = "<group>"; };
+		CC711D722B5BF6B7007235A6 /* SBSAccessibilityWindowHostingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBSAccessibilityWindowHostingController.h; sourceTree = "<group>"; };
+		CC711D732B5BF6B7007235A6 /* UIEventFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIEventFetcher.h; sourceTree = "<group>"; };
+		CC711D742B5BF6B7007235A6 /* BackboardServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackboardServices.h; sourceTree = "<group>"; };
+		CC711D752B5BF6B7007235A6 /* kern_memorystatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kern_memorystatus.h; sourceTree = "<group>"; };
+		CC711D762B5BF6B7007235A6 /* LSApplicationWorkspace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSApplicationWorkspace.h; sourceTree = "<group>"; };
+		CC711D782B5BF6B7007235A6 /* UIEvent+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIEvent+Private.h"; sourceTree = "<group>"; };
+		CC711D7B2B5BF6B7007235A6 /* UIWindow+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+Private.h"; sourceTree = "<group>"; };
+		CC711D7D2B5BF6B7007235A6 /* UIEventDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIEventDispatcher.h; sourceTree = "<group>"; };
+		CC711D7E2B5BF772007235A6 /* hudapp-prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "hudapp-prefix.pch"; sourceTree = "<group>"; };
+		CC711D7F2B5BF772007235A6 /* entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = entitlements.plist; sourceTree = "<group>"; };
+		CC711D812B5BFA64007235A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Resources/Info.plist; sourceTree = SOURCE_ROOT; };
+		CC711D862B5BFCC4007235A6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
+		CC711D8D2B5BFD50007235A6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
+		CC711D952B5BFF2F007235A6 /* GraphicsServices.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = GraphicsServices.tbd; sourceTree = "<group>"; };
+		CC711D962B5BFF2F007235A6 /* SpringBoardServices.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = SpringBoardServices.tbd; sourceTree = "<group>"; };
+		CC711D972B5BFF2F007235A6 /* BackBoardServices.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = BackBoardServices.tbd; sourceTree = "<group>"; };
+		CC711D9D2B5C0081007235A6 /* AssertionServices.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = AssertionServices.tbd; sourceTree = "<group>"; };
+		CC8DDA982B66318E001C7C9E /* AppIntents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppIntents.framework; path = System/Library/Frameworks/AppIntents.framework; sourceTree = SDKROOT; };
+		CC9130A02B616BBF006E3280 /* CAFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAFilter.h; sourceTree = "<group>"; };
+		CC9130A12B616C18006E3280 /* HUDBackdropView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HUDBackdropView.h; sourceTree = "<group>"; };
+		CC9130A22B616C18006E3280 /* HUDBackdropView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HUDBackdropView.mm; sourceTree = "<group>"; };
+		CC9130A52B62A262006E3280 /* hudapp-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hudapp-bridging-header.h"; sourceTree = "<group>"; };
+		CCB6B6FB2B5C074F00AD2A89 /* rootless.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rootless.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CC711CFE2B5BF550007235A6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC711D992B5BFF2F007235A6 /* SpringBoardServices.tbd in Frameworks */,
+				CC711D9E2B5C0081007235A6 /* AssertionServices.tbd in Frameworks */,
+				CC8DDA9A2B6631DC001C7C9E /* AppIntents.framework in Frameworks */,
+				CC711D9A2B5BFF2F007235A6 /* BackBoardServices.tbd in Frameworks */,
+				CC711D982B5BFF2F007235A6 /* GraphicsServices.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C1D0B9102CC036D300F3F5E4 /* Wallpaper */ = {
+			isa = PBXGroup;
+			children = (
+				C1D0B9112CC0370700F3F5E4 /* Wallpaper.h */,
+				C1D0B9122CC0371100F3F5E4 /* Wallpaper.m */,
+			);
+			path = Wallpaper;
+			sourceTree = "<group>";
+		};
+		C1D0B9182CC054D200F3F5E4 /* Daemon */ = {
+			isa = PBXGroup;
+			children = (
+				CC711D482B5BF5C6007235A6 /* HUDApp.mm */,
+				CC711D432B5BF5C6007235A6 /* HUDHelper.h */,
+				CC711D1E2B5BF5C6007235A6 /* HUDHelper.mm */,
+				CC711D282B5BF5C6007235A6 /* HUDMainApplication.h */,
+				CC711D452B5BF5C6007235A6 /* HUDMainApplication.mm */,
+				CC711D402B5BF5C6007235A6 /* HUDMainApplicationDelegate.h */,
+				CC711D272B5BF5C6007235A6 /* HUDMainApplicationDelegate.mm */,
+				CC711D412B5BF5C6007235A6 /* HUDMainWindow.h */,
+				CC711D202B5BF5C6007235A6 /* HUDMainWindow.mm */,
+				CC711D252B5BF5C6007235A6 /* HUDRootViewController.h */,
+				CC711D442B5BF5C6007235A6 /* HUDRootViewController.mm */,
+				CC9130A12B616C18006E3280 /* HUDBackdropView.h */,
+				CC9130A22B616C18006E3280 /* HUDBackdropView.mm */,
+				CC711D3E2B5BF5C6007235A6 /* RootViewController.h */,
+				CC711D1F2B5BF5C6007235A6 /* RootViewController.mm */,
+				C1CFC87E2CC069AA007F0CF9 /* Daemon.h */,
+				C1CFC87F2CC069BE007F0CF9 /* Daemon.m */,
+			);
+			path = Daemon;
+			sourceTree = "<group>";
+		};
+		C1D0B9192CC054F800F3F5E4 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				C1D0B91A2CC0558E00F3F5E4 /* BlossomView.swift */,
+				C1D0B91C2CC0567100F3F5E4 /* BlossomViewController.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		CC711CF82B5BF550007235A6 = {
+			isa = PBXGroup;
+			children = (
+				C1D0B9142CC0471B00F3F5E4 /* README.md */,
+				C1D0B90D2CC0336600F3F5E4 /* build.sh */,
+				CC711D022B5BF550007235A6 /* Products */,
+				CC711D652B5BF6B7007235A6 /* headers */,
+				CC711D942B5BFE9F007235A6 /* libraries */,
+				CC711D032B5BF550007235A6 /* supports */,
+				CC711D1D2B5BF5C6007235A6 /* sources */,
+				CC8DDA972B66318E001C7C9E /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		CC711D022B5BF550007235A6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CC711D012B5BF550007235A6 /* Blossom.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CC711D032B5BF550007235A6 /* supports */ = {
+			isa = PBXGroup;
+			children = (
+				CC711D102B5BF551007235A6 /* Assets.xcassets */,
+				C1D0B9162CC051C900F3F5E4 /* icon.png */,
+				CC711D7F2B5BF772007235A6 /* entitlements.plist */,
+				CC711D7E2B5BF772007235A6 /* hudapp-prefix.pch */,
+				CC9130A52B62A262006E3280 /* hudapp-bridging-header.h */,
+				CC711D812B5BFA64007235A6 /* Info.plist */,
+				CC711D872B5BFCC4007235A6 /* Localizable.strings */,
+				CC711D8E2B5BFD50007235A6 /* InfoPlist.strings */,
+			);
+			path = supports;
+			sourceTree = "<group>";
+		};
+		CC711D1D2B5BF5C6007235A6 /* sources */ = {
+			isa = PBXGroup;
+			children = (
+				C1D0B9192CC054F800F3F5E4 /* UI */,
+				C1D0B9182CC054D200F3F5E4 /* Daemon */,
+				C1D0B9102CC036D300F3F5E4 /* Wallpaper */,
+				CC711D242B5BF5C6007235A6 /* MainApplication.h */,
+				CC711D422B5BF5C6007235A6 /* MainApplication.mm */,
+				CC711D262B5BF5C6007235A6 /* MainApplicationDelegate.h */,
+				CC711D222B5BF5C6007235A6 /* MainApplicationDelegate.mm */,
+			);
+			path = sources;
+			sourceTree = "<group>";
+		};
+		CC711D652B5BF6B7007235A6 /* headers */ = {
+			isa = PBXGroup;
+			children = (
+				CC711D742B5BF6B7007235A6 /* BackboardServices.h */,
+				CC711D752B5BF6B7007235A6 /* kern_memorystatus.h */,
+				CC711D6C2B5BF6B7007235A6 /* libproc.h */,
+				CC711D6B2B5BF6B7007235A6 /* LSApplicationProxy.h */,
+				CC711D762B5BF6B7007235A6 /* LSApplicationWorkspace.h */,
+				CC711D702B5BF6B7007235A6 /* pac_helper.h */,
+				CCB6B6FB2B5C074F00AD2A89 /* rootless.h */,
+				CC711D722B5BF6B7007235A6 /* SBSAccessibilityWindowHostingController.h */,
+				CC711D6F2B5BF6B7007235A6 /* SpringBoardServices.h */,
+				CC711D692B5BF6B7007235A6 /* UIApplication+Private.h */,
+				CC711D782B5BF6B7007235A6 /* UIEvent+Private.h */,
+				CC711D7D2B5BF6B7007235A6 /* UIEventDispatcher.h */,
+				CC711D732B5BF6B7007235A6 /* UIEventFetcher.h */,
+				CC711D7B2B5BF6B7007235A6 /* UIWindow+Private.h */,
+				CC9130A02B616BBF006E3280 /* CAFilter.h */,
+				C1CFC8822CC07C5E007F0CF9 /* NSUserDefaults+Private.h */,
+			);
+			path = headers;
+			sourceTree = "<group>";
+		};
+		CC711D942B5BFE9F007235A6 /* libraries */ = {
+			isa = PBXGroup;
+			children = (
+				CC711D9D2B5C0081007235A6 /* AssertionServices.tbd */,
+				CC711D972B5BFF2F007235A6 /* BackBoardServices.tbd */,
+				CC711D952B5BFF2F007235A6 /* GraphicsServices.tbd */,
+				CC711D962B5BFF2F007235A6 /* SpringBoardServices.tbd */,
+			);
+			path = libraries;
+			sourceTree = "<group>";
+		};
+		CC8DDA972B66318E001C7C9E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CC8DDA982B66318E001C7C9E /* AppIntents.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CC711D002B5BF550007235A6 /* Blossom */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CC711D1A2B5BF551007235A6 /* Build configuration list for PBXNativeTarget "Blossom" */;
+			buildPhases = (
+				CC711CFD2B5BF550007235A6 /* Sources */,
+				CC711CFE2B5BF550007235A6 /* Frameworks */,
+				CC711CFF2B5BF550007235A6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Blossom;
+			productName = TrollSpeed;
+			productReference = CC711D012B5BF550007235A6 /* Blossom.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CC711CF92B5BF550007235A6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					CC711D002B5BF550007235A6 = {
+						CreatedOnToolsVersion = 15.1;
+					};
+				};
+			};
+			buildConfigurationList = CC711CFC2B5BF550007235A6 /* Build configuration list for PBXProject "Blossom" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CC711CF82B5BF550007235A6;
+			productRefGroup = CC711D022B5BF550007235A6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CC711D002B5BF550007235A6 /* Blossom */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CC711CFF2B5BF550007235A6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1D0B9172CC051CA00F3F5E4 /* icon.png in Resources */,
+				C1D0B9152CC0471B00F3F5E4 /* README.md in Resources */,
+				CC711D8C2B5BFD50007235A6 /* InfoPlist.strings in Resources */,
+				C1D0B90E2CC0336600F3F5E4 /* build.sh in Resources */,
+				CC711D852B5BFCC4007235A6 /* Localizable.strings in Resources */,
+				CC711D112B5BF551007235A6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CC711CFD2B5BF550007235A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC711D4A2B5BF5C6007235A6 /* HUDHelper.mm in Sources */,
+				CC9130A32B616C18006E3280 /* HUDBackdropView.mm in Sources */,
+				C1D0B91B2CC0558E00F3F5E4 /* BlossomView.swift in Sources */,
+				C1CFC8802CC069BE007F0CF9 /* Daemon.m in Sources */,
+				CC711D612B5BF5C6007235A6 /* HUDMainApplication.mm in Sources */,
+				CC711D5F2B5BF5C6007235A6 /* MainApplication.mm in Sources */,
+				CC711D4B2B5BF5C6007235A6 /* RootViewController.mm in Sources */,
+				CC711D642B5BF5C6007235A6 /* HUDApp.mm in Sources */,
+				C1D0B9132CC0371100F3F5E4 /* Wallpaper.m in Sources */,
+				CC711D4D2B5BF5C6007235A6 /* MainApplicationDelegate.mm in Sources */,
+				CC711D602B5BF5C6007235A6 /* HUDRootViewController.mm in Sources */,
+				CC711D4E2B5BF5C6007235A6 /* HUDMainApplicationDelegate.mm in Sources */,
+				C1D0B91D2CC0567100F3F5E4 /* BlossomViewController.swift in Sources */,
+				CC711D4C2B5BF5C6007235A6 /* HUDMainWindow.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		CC711D872B5BFCC4007235A6 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CC711D862B5BFCC4007235A6 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		CC711D8E2B5BFD50007235A6 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CC711D8D2B5BFD50007235A6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CC711D182B5BF551007235A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_MODULE_NAME = Blossom;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "supports/hudapp-bridging-header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		CC711D192B5BF551007235A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_MODULE_NAME = Blossom;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = "supports/hudapp-bridging-header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		CC711D1B2B5BF551007235A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGN_ENTITLEMENTS = supports/entitlements.plist;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "supports/hudapp-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"THEOS_PACKAGE_INSTALL_PREFIX=\\\"\\\"",
+				);
+				INFOPLIST_FILE = Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Blossom;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libraries",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.inyourwalls.blossom;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "supports/hudapp-bridging-header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CC711D1C2B5BF551007235A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGN_ENTITLEMENTS = supports/entitlements.plist;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "supports/hudapp-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"THEOS_PACKAGE_INSTALL_PREFIX=\\\"\\\"",
+				);
+				INFOPLIST_FILE = Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Blossom;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libraries",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.inyourwalls.blossom;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "supports/hudapp-bridging-header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CC711CFC2B5BF550007235A6 /* Build configuration list for PBXProject "Blossom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC711D182B5BF551007235A6 /* Debug */,
+				CC711D192B5BF551007235A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CC711D1A2B5BF551007235A6 /* Build configuration list for PBXNativeTarget "Blossom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC711D1B2B5BF551007235A6 /* Debug */,
+				CC711D1C2B5BF551007235A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CC711CF92B5BF550007235A6 /* Project object */;
+}
