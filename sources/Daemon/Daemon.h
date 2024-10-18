@@ -5,6 +5,4 @@ typedef void (^ToggleCallback)(BOOL);
 
 -(void) toggle;
 -(BOOL) isEnabled;
-
--(void) setDelay: (double) delay;
 @end

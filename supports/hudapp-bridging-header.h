@@ -5,5 +5,6 @@
 
 #import "HUDHelper.h"
 #import "Daemon.h"
+#import "Wallpaper.h"
 
 #endif /* hudapp_bridging_header_h */

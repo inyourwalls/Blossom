@@ -25,7 +25,8 @@ int main(int argc, char *argv[])
         if (argc <= 1) {
             return UIApplicationMain(argc, argv, @"MainApplication", @"MainApplicationDelegate");
         }
-
+        
+#if !TARGET_IPHONE_SIMULATOR
         if (strcmp(argv[1], "-hud") == 0)
         {
             pid_t pid = getpid();
@@ -105,5 +106,6 @@ int main(int argc, char *argv[])
             }
             else return EXIT_SUCCESS;  // No PID file, so HUD is not running
         }
+#endif
     }
 }

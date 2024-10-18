@@ -23,7 +23,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>1</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -36,24 +36,13 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>c016dd82</string>
+	<string>1.0</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.developer-tools</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2024 inyourwalls</string>
 	<key>NSPrincipalClass</key>
 	<string>HUDMainApplication</string>
-	<key>UIApplicationShortcutItems</key>
-	<array>
-		<dict>
-			<key>UIApplicationShortcutItemIconSymbolName</key>
-			<string>wand.and.stars</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Toggle HUD</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>ch.xxtou.shortcut.toggle-hud</string>
-		</dict>
-	</array>
 	<key>UIApplicationShowsViewsWhileLocked</key>
 	<false/>
 	<key>UIApplicationSystemWindowsSecureKey</key>
@@ -65,15 +54,12 @@
 	<key>UIRequiresFullScreen</key>
 	<false/>
 	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleLightContent</string>
+	<string>UIStatusBarStyleDarkContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	<true/>
 </dict>
 </plist>

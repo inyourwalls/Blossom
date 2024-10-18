@@ -43,7 +43,4 @@
     }
 }
 
-- (void)setDelay:(double)delay {
-    [GetStandardUserDefaults() setDouble:delay forKey:@"DelayInSeconds"];
-}
 @end

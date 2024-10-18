@@ -43,6 +43,7 @@ static void LaunchServicesApplicationStateChanged
     }
 }
 
+#if !TARGET_IPHONE_SIMULATOR
 static void SpringBoardLockStatusChanged
 (CFNotificationCenterRef center,
  void *observer,
@@ -72,6 +73,7 @@ static void SpringBoardLockStatusChanged
         }
     }
 }
+#endif
 
 #pragma mark - HUDRootViewController
 
@@ -83,6 +85,7 @@ static void SpringBoardLockStatusChanged
 
 - (void)registerNotifications
 {
+#if !TARGET_IPHONE_SIMULATOR
     int token;
     notify_register_dispatch(NOTIFY_RELOAD_HUD, &token, dispatch_get_main_queue(), ^(int token) {
         
@@ -107,6 +110,7 @@ static void SpringBoardLockStatusChanged
         NULL,
         CFNotificationSuspensionBehaviorCoalesce
     );
+#endif
 }
 
 - (BOOL)usesCustomFontSize { return NO; }
@@ -131,8 +135,7 @@ static void SpringBoardLockStatusChanged
     
     [wallpaper restartPoster];
     
-    double interval = [GetStandardUserDefaults() doubleForKey:@"DelayInSeconds"];
-    NSLog(@"Timer interval: %f", interval);
+    double interval = 5.2;
 
     [NSTimer scheduledTimerWithTimeInterval:interval repeats: true block: ^(NSTimer * _Nonnull timer) {
         [wallpaper restartPoster];
