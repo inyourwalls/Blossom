@@ -25,7 +25,7 @@ By default, live wallpapers play whenever you unlock the screen. You can make it
 
 It uses as much battery as a normal live photo.
 
-However, if you decide to loop the video, it`ll consume some additional battery.
+However, if you decide to loop the video, it will consume some additional battery.
 
 ### Can the video be longer than 5 seconds?
 
