@@ -3,7 +3,6 @@ import PhotosUI
 import AVKit
 import AVFoundation
 import UIKit
-import AppleArchive
 import System
 
 struct LiveWallpaperEditorView: View {
@@ -12,43 +11,22 @@ struct LiveWallpaperEditorView: View {
     
     @State var liveWallpaper: WallpaperSelection? = nil
     @State private var player = AVPlayer()
-    @State private var videoLoadedSuccessfully = false
+    @State private var videoURL: URL? = nil
     
     var body: some View {
         VStack {
-            if !videoLoadedSuccessfully {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .purple))
-                    .scaleEffect(2.0, anchor: .center)
-            } else {
-                Text(liveWallpaper!.wallpaper.wallpaperRootDirectory)
-                
-                Button(action: {
-                    setWallpaper()
-                }) {
-                    Text("Test Set")
-                }
-                
-                LiveWallpaperView(wallpaperPath: "", player: player)
-                    .frame(width: 250, height: 250)
-            }
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: .purple))
+                .scaleEffect(2.0, anchor: .center)
         }
         .onAppear {
             if let liveWallpaper = liveWallpaper {
                 loadVideo(liveWallpaper.userVideo)
             }
         }
-        .alert(isPresented: $sheetManager.alertShown) {
-            Alert(
-                title: Text(sheetManager.alertTitle),
-                message: Text(sheetManager.alertMessage),
-                dismissButton: .default(Text("OK"))
-            )
-        }
         .padding()
         .preferredColorScheme(.light)
     }
-    
     
     private func loadVideo(_ item: PhotosPickerItem) {
         Task {
@@ -56,7 +34,8 @@ struct LiveWallpaperEditorView: View {
                 if let url = try await item.loadTransferable(type: VideoTransferable.self) {
                     let playerItem = AVPlayerItem(url: url.url)
                     player.replaceCurrentItem(with: playerItem)
-                    self.videoLoadedSuccessfully = true
+                    
+                    self.setWallpaper()
                 }
             } catch {
                 DispatchQueue.main.async {
@@ -69,17 +48,48 @@ struct LiveWallpaperEditorView: View {
     private func setWallpaper() {
         var videoAsset = player.currentItem!.asset
         
+        // TODO: Create a video showing how to crop the wallpaper and open a guide view
+        
+        let durationSeconds = CMTimeGetSeconds(videoAsset.duration)
+        if CMTimeCompare(videoAsset.duration, CMTime(seconds: 5, preferredTimescale: 600)) != 0 {
+            sheetManager.closeAll()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                sheetManager.showAlert(title: "Error", message: "Video must be exactly 5.0 seconds long.\nDuration of the selected video: \(durationSeconds)s")
+            }
+            return
+        }
+
+        let track = videoAsset.tracks(withMediaType: AVMediaType.video).first!
+        let size = track.naturalSize.applying(track.preferredTransform)
+        let videoSize = CGSize(width: fabs(size.width), height: fabs(size.height))
+
+        let screenWidth = UIScreen.main.bounds.size.width * UIScreen.main.scale
+        let screenHeight = UIScreen.main.bounds.size.height * UIScreen.main.scale
+        
+        if videoSize.width != screenWidth || videoSize.height != screenHeight {
+            sheetManager.closeAll()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                sheetManager.showAlert(title: "Error", message: "Video should be exactly your screen resolution - \(screenWidth)x\(screenHeight).\nResolution of the selected video: \(size.width)x\(size.height)")
+            }
+            return
+        }
+        
         let exportSession = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)!
         exportSession.outputURL = URL(filePath: liveWallpaper!.wallpaper.path)
         exportSession.outputFileType = .mov
-        
+
         let timeRange = CMTimeRange(start: .zero, duration: CMTime(seconds: 5, preferredTimescale: 600))
         exportSession.timeRange = timeRange
         
         do {
             try FileManager.default.moveItem(atPath: liveWallpaper!.wallpaper.path, toPath: liveWallpaper!.wallpaper.path + ".backup." + UUID().uuidString)
         } catch {
-            sheetManager.showAlert(title: "Error", message: "Failed to rename .MOV file: \(error.localizedDescription)")
+            sheetManager.closeAll()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                sheetManager.showAlert(title: "Error", message: "Failed to rename .MOV file: \(error.localizedDescription)")
+            }
+            
         }
             
         exportSession.exportAsynchronously {
@@ -89,8 +99,7 @@ struct LiveWallpaperEditorView: View {
                 imageGenerator.requestedTimeToleranceAfter = .zero
                 imageGenerator.requestedTimeToleranceBefore = .zero
                 
-                let duration = videoAsset.duration
-                let lastFrameTime = CMTime(seconds: 5.0/* - 0.01*/, preferredTimescale: 600)
+                let lastFrameTime = CMTime(seconds: 5.0, preferredTimescale: 600)
                 
                 imageGenerator.generateCGImagesAsynchronously(forTimes: [NSValue(time: lastFrameTime)]) { _, image, _, result, _ in
                     if result == .succeeded, let cgImage = image {
@@ -115,7 +124,11 @@ struct LiveWallpaperEditorView: View {
                                                             
                                 if(!FileManager.default.fileExists(atPath: liveWallpaper!.wallpaper.contentsPath)) {
                                     DispatchQueue.main.async {
-                                        sheetManager.showAlert(title: "Error", message: "Contents.json file does not exist.")
+                                        sheetManager.closeAll()
+                                        
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            sheetManager.showAlert(title: "Error", message: "Contents.json file does not exist.")
+                                        }
                                     }
                                     return
                                 }
@@ -185,19 +198,33 @@ struct LiveWallpaperEditorView: View {
                                     }
                                 } catch {
                                     DispatchQueue.main.async {
-                                        sheetManager.showAlert(title: "Error", message: "Failed to patch Contents.json: \(error)")
+                                        sheetManager.closeAll()
+                                        
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            sheetManager.showAlert(title: "Error", message: "Failed to patch Contents.json: \(error)")
+                                        }
                                     }
                                 }
                             } catch {
                                 DispatchQueue.main.async {
-                                    sheetManager.showAlert(title: "Error", message: "Failed to export HEIC image: \(error.localizedDescription)")
+                                    sheetManager.closeAll()
+                                    
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        sheetManager.showAlert(title: "Error", message: "Failed to export HEIC image: \(error.localizedDescription)")
+                                    }
                                 }
                             }
                         }
                     }
                 }
             default:
-                sheetManager.showAlert(title: "Error", message: "Failed to export video: \(exportSession.error.debugDescription)")
+                DispatchQueue.main.async {
+                    sheetManager.closeAll()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        sheetManager.showAlert(title: "Error", message: "Failed to export video: \(exportSession.error.debugDescription)")
+                    }
+                }
             }
         }
     }

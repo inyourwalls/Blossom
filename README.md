@@ -6,7 +6,7 @@
 
 Live wallpapers for non-jailbroken iOS 17.0 with TrollStore.
 
-## How does it work?
+## How does it work
 
 iOS 17.0 reintroduced live photos as wallpapers, but they aren't very good.
 
@@ -14,12 +14,18 @@ Blossom replaces the live photo with a video of your choice that can last for 5 
 
 Live wallpapers can be looped by repeatedly crashing the `PhotosPosterProvider` process.
 
-### How to use
+## How to use
 
 1. Create a Live Photo wallpaper in iOS. Make sure to configure widgets, clock style, etc., now, as you **cannot** edit the wallpaper afterwards.
 2. Open Blossom and click "Set Wallpaper", select your recently created wallpaper and any custom video.
 
 By default, live wallpapers play whenever you unlock the screen. You can make it loop by toggling the relevant setting in the app.
+
+## FAQ
+
+### I cannot create a new wallpaper
+
+Disable "Loop" in the app, create a new wallpaper and you may check it again.
 
 ### Does it consume battery?
 

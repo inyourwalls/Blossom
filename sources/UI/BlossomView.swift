@@ -16,8 +16,8 @@ struct BlossomView: View {
                     .resizable()
                     .frame(width: 300, height: 300)
                     .cornerRadius(10)
-                    .padding(.top, 100)
-                    .padding(.bottom, 100)
+                    .padding(.top, 120)
+                    .padding(.bottom, 120)
             
                 List {
                     Section(header:
@@ -55,17 +55,6 @@ struct BlossomView: View {
                                 .frame(width: 50, height: 0)
                                 .toggleStyle(SwitchToggleStyle(tint: .purple))
                                 .disabled(!interactionAllowed)
-                                .onTapGesture {
-                                    if !interactionAllowed {
-                                        return
-                                    }
-                                    
-                                    daemon.toggle()
-                                    
-                                    if !isLoopEnabled {
-                                        sheetManager.showAlert(title: "Note", message: "Live wallpapers will now loop.\nIf you want to set new wallpapers, disable this or you won't be able to set them.")
-                                    }
-                                }
                         }
                     }
                 }
@@ -74,7 +63,13 @@ struct BlossomView: View {
             }
             .navigationTitle("Blossom")
             .navigationBarTitleDisplayMode(.inline)
-            
+            .onChange(of: isLoopEnabled) {
+                daemon.toggle()
+                
+                if isLoopEnabled {
+                    sheetManager.showAlert(title: "Note", message: "Live wallpapers will now loop.\nIf you want to set new wallpapers, disable this or you won't be able to set them.")
+                }
+            }
             .onAppear {
                 daemon.callback = { allowInteraction in
                     interactionAllowed = allowInteraction

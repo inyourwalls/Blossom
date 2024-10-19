@@ -54,7 +54,7 @@ struct WallpaperSelectorModal: View {
                                     if let path = wallpaper.path {
                                         PhotosPicker(selection: $selectedUserVideo, matching: .videos) {
                                             LiveWallpaperView(wallpaperPath: path)
-                                                .frame(width: geometry.size.width / 2 - 20, height: geometry.size.width)
+                                                .frame(width: geometry.size.width / 2 - 20, height: geometry.size.width - 20)
                                                 .cornerRadius(10)
                                                 .clipped()
                                                 .containerShape(Rectangle())

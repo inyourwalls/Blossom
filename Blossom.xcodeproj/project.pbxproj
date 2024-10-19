@@ -273,6 +273,8 @@
 			dependencies = (
 			);
 			name = Blossom;
+			packageProductDependencies = (
+			);
 			productName = TrollSpeed;
 			productReference = CC711D012B5BF550007235A6 /* Blossom.app */;
 			productType = "com.apple.product-type.application";
@@ -300,6 +302,8 @@
 				Base,
 			);
 			mainGroup = CC711CF82B5BF550007235A6;
+			packageReferences = (
+			);
 			productRefGroup = CC711D022B5BF550007235A6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -525,10 +529,11 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "supports/hudapp-bridging-header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -569,10 +574,11 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "supports/hudapp-bridging-header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
