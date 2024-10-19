@@ -6,7 +6,7 @@
 
 Live wallpapers for non-jailbroken iOS 17.0 with TrollStore.
 
-![Preview](preview.gif)
+![preview](https://github.com/user-attachments/assets/e60ce8d4-9da1-47a9-8b53-542db70efa56)
 
 ## How does it work
 
