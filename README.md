@@ -18,10 +18,14 @@ Live wallpapers can be looped by repeatedly crashing the `PhotosPosterProvider` 
 
 ## How to use
 
-1. Create a Live Photo wallpaper in iOS. Make sure to configure widgets, clock style, etc., now, as you **cannot** edit the wallpaper afterwards.
-2. Open Blossom and click "Set Wallpaper", select your recently created wallpaper and any custom video.
+1. Crop your video to your phone screen resolution beforehand, and trim it to exactly 5 seconds. See the video guide below:
 
-By default, live wallpapers play whenever you unlock the screen. You can make it loop by toggling the relevant setting in the app.
+https://github.com/user-attachments/assets/361c9bbe-9788-44d6-b501-de690fff9144
+
+2. Create a Live Photo wallpaper in iOS. Make sure to configure widgets, clock style, etc., now, as you **cannot** edit the wallpaper afterwards.
+3. Open Blossom and click "Set Wallpaper", select your recently created wallpaper and any custom video.
+
+> By default, live wallpapers play whenever you unlock the screen. You can make it loop by toggling the relevant setting in the app.
 
 ## FAQ
 
