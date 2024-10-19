@@ -18,7 +18,7 @@ Live wallpapers can be looped by repeatedly crashing the `PhotosPosterProvider` 
 
 ## How to use
 
-Download the **.tipa** file from [Releases](https://github.com/inyourwalls/Blossom/releases) page and install it in TrollStore,
+Download the **.tipa** file from [Releases](https://github.com/inyourwalls/Blossom/releases) page and install it in TrollStore.
 
 1. Crop your video to your phone screen resolution beforehand, and trim it to exactly 5 seconds. See the video guide below:
 
