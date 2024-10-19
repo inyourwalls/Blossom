@@ -31,7 +31,7 @@ https://github.com/user-attachments/assets/361c9bbe-9788-44d6-b501-de690fff9144
 
 ### I cannot create a new wallpaper
 
-Disable "Loop" in the app, create a new wallpaper and you may check it again.
+If it looks like a crash whenever you try to select a photo for the wallpaper, disable "Loop" in the app and then you'll be able to create wallpapers again.
 
 ### Does it consume battery?
 
