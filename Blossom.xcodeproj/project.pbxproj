@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C1301E972CC296F500EC6C20 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1301E962CC296F500EC6C20 /* SheetManager.swift */; };
 		C1301E992CC29C6400EC6C20 /* WallpaperContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1301E982CC29C6400EC6C20 /* WallpaperContents.swift */; };
+		C13691E12CC3DCCD00C6967C /* CropGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13691E02CC3DCCD00C6967C /* CropGuideView.swift */; };
 		C13796852CC17FAF009AA80B /* LiveWallpaperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13796842CC17FAF009AA80B /* LiveWallpaperView.swift */; };
 		C13796872CC18D76009AA80B /* LiveWallpaperEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13796862CC18D76009AA80B /* LiveWallpaperEditorView.swift */; };
 		C137968B2CC19EEE009AA80B /* WallpaperSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C137968A2CC19EEE009AA80B /* WallpaperSelection.swift */; };
@@ -41,6 +42,7 @@
 /* Begin PBXFileReference section */
 		C1301E962CC296F500EC6C20 /* SheetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
 		C1301E982CC29C6400EC6C20 /* WallpaperContents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperContents.swift; sourceTree = "<group>"; };
+		C13691E02CC3DCCD00C6967C /* CropGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropGuideView.swift; sourceTree = "<group>"; };
 		C13796842CC17FAF009AA80B /* LiveWallpaperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWallpaperView.swift; sourceTree = "<group>"; };
 		C13796862CC18D76009AA80B /* LiveWallpaperEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWallpaperEditorView.swift; sourceTree = "<group>"; };
 		C137968A2CC19EEE009AA80B /* WallpaperSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSelection.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				C13796842CC17FAF009AA80B /* LiveWallpaperView.swift */,
 				C13796862CC18D76009AA80B /* LiveWallpaperEditorView.swift */,
 				C1301E962CC296F500EC6C20 /* SheetManager.swift */,
+				C13691E02CC3DCCD00C6967C /* CropGuideView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 			files = (
 				C14492BB2CC1600A006B0EC5 /* WallpaperSelectorModal.swift in Sources */,
 				CC711D4A2B5BF5C6007235A6 /* HUDHelper.mm in Sources */,
+				C13691E12CC3DCCD00C6967C /* CropGuideView.swift in Sources */,
 				CC9130A32B616C18006E3280 /* HUDBackdropView.mm in Sources */,
 				C1D0B91B2CC0558E00F3F5E4 /* BlossomView.swift in Sources */,
 				C1CFC8802CC069BE007F0CF9 /* Daemon.m in Sources */,

@@ -36,7 +36,7 @@ static BOOL _gShouldToggleHUDAfterLaunch = NO;
 
 - (void)setHUDEnabled:(BOOL)enabled
 {
-        SetHUDEnabled(enabled);
+    SetHUDEnabled(enabled);
 }
 
 - (void)registerNotifications

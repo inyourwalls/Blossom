@@ -6,6 +6,8 @@
 
 Live wallpapers for non-jailbroken iOS 17.0 with TrollStore.
 
+![Preview](preview.gif)
+
 ## How does it work
 
 iOS 17.0 reintroduced live photos as wallpapers, but they aren't very good.

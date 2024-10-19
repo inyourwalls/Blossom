@@ -74,7 +74,7 @@ struct WallpaperSelectorModal: View {
             }
         }
         .preferredColorScheme(.light)
-        .sheet(item: $sheetManager.selectedWallpaper) { item in
+        .fullScreenCover(item: $sheetManager.selectedWallpaper) { item in
             LiveWallpaperEditorView(sheetManager: sheetManager, liveWallpaper: item)
                 .onDisappear {
                     self.selectedUserVideo = nil

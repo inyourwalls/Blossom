@@ -3,7 +3,11 @@ import SwiftUI
 struct BlossomView: View {
     
     @State private var isLoopEnabled: Bool = false
+    @State private var isInitialized: Bool = false
     @State private var interactionAllowed: Bool = false
+    
+    @State private var showAlert = false
+    @State private var alertMessage = ""
     
     @ObservedObject var sheetManager: SheetManager = SheetManager()
     
@@ -30,6 +34,7 @@ struct BlossomView: View {
                         .padding(.bottom, 5)
                     ) {
                         Button(action: {
+                            isLoopEnabled = false
                             sheetManager.wallpaperSelector = true
                         }) {
                             HStack {
@@ -64,10 +69,13 @@ struct BlossomView: View {
             .navigationTitle("Blossom")
             .navigationBarTitleDisplayMode(.inline)
             .onChange(of: isLoopEnabled) {
-                daemon.toggle()
-                
-                if isLoopEnabled {
-                    sheetManager.showAlert(title: "Note", message: "Live wallpapers will now loop.\nIf you want to set new wallpapers, disable this or you won't be able to set them.")
+                if isInitialized {
+                    daemon.toggle()
+                    
+                    if isLoopEnabled {
+                        showAlert = true
+                        alertMessage = "While this option is active, you are not able to create new wallpapers in iOS.\nDisable this to make a new wallpaper."
+                    }
                 }
             }
             .onAppear {
@@ -75,19 +83,26 @@ struct BlossomView: View {
                     interactionAllowed = allowInteraction
                 }
                 
-                self.isLoopEnabled = IsHUDEnabled()
-                self.interactionAllowed = true
+                self.isLoopEnabled = daemon.isEnabled()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.isInitialized = true
+                    self.interactionAllowed = true
+                }
             }
         }
-        .alert(isPresented: $sheetManager.alertShown) {
+        .alert(isPresented: $showAlert) {
             Alert(
-                title: Text(sheetManager.alertTitle),
-                message: Text(sheetManager.alertMessage),
+                title: Text("Blossom"),
+                message: Text(alertMessage),
                 dismissButton: .default(Text("OK"))
             )
         }
         .sheet(isPresented: $sheetManager.wallpaperSelector, content: {
             WallpaperSelectorModal(sheetManager: sheetManager)
+        })
+        .sheet(isPresented: $sheetManager.cropGuide, content: {
+            CropGuideView()
         })
         .preferredColorScheme(.light)
     }

@@ -13,19 +13,34 @@ struct LiveWallpaperEditorView: View {
     @State private var player = AVPlayer()
     @State private var videoURL: URL? = nil
     
+    @State private var showErrorAlert = false
+    @State private var errorAlertMessage = ""
+    
     var body: some View {
         VStack {
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle(tint: .purple))
                 .scaleEffect(2.0, anchor: .center)
+                .padding(25)
         }
         .onAppear {
             if let liveWallpaper = liveWallpaper {
                 loadVideo(liveWallpaper.userVideo)
             }
         }
+        .alert(isPresented: $showErrorAlert) {
+            Alert(
+                title: Text("Error"),
+                message: Text(errorAlertMessage),
+                dismissButton: .default(Text("OK")) {
+                    sheetManager.closeAll()
+                }
+            )
+        }
         .padding()
         .preferredColorScheme(.light)
+        .background(.white)
+        .cornerRadius(.infinity)
     }
     
     private func loadVideo(_ item: PhotosPickerItem) {
@@ -38,9 +53,7 @@ struct LiveWallpaperEditorView: View {
                     self.setWallpaper()
                 }
             } catch {
-                DispatchQueue.main.async {
-                    sheetManager.showAlert(title: "Error", message: "Failed to load the video: \(error.localizedDescription)")
-                }
+                print("Video loading error: \(error)")
             }
         }
     }
@@ -48,17 +61,13 @@ struct LiveWallpaperEditorView: View {
     private func setWallpaper() {
         var videoAsset = player.currentItem!.asset
         
-        // TODO: Create a video showing how to crop the wallpaper and open a guide view
-        
         let durationSeconds = CMTimeGetSeconds(videoAsset.duration)
         let targetDuration: Double = 5.0
         let tolerance: Double = 0.09
 
         if abs(durationSeconds - targetDuration) > tolerance {
             sheetManager.closeAll()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                sheetManager.showAlert(title: "Error", message: "Video must be exactly 5.0 seconds long.\nDuration of the selected video: \(durationSeconds)s")
-            }
+            sheetManager.cropGuide = true
             return
         }
 
@@ -74,11 +83,10 @@ struct LiveWallpaperEditorView: View {
 
         if abs(videoAspectRatio - screenAspectRatio) > 0.01 {
             sheetManager.closeAll()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                sheetManager.showAlert(title: "Error", message: "Video should have the same aspect ratio as your screen.")
-            }
+            sheetManager.cropGuide = true
             return
         }
+        
         let exportSession = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)!
         exportSession.outputURL = URL(filePath: liveWallpaper!.wallpaper.path)
         exportSession.outputFileType = .mov
@@ -103,12 +111,10 @@ struct LiveWallpaperEditorView: View {
         do {
             try FileManager.default.moveItem(atPath: liveWallpaper!.wallpaper.path, toPath: liveWallpaper!.wallpaper.path + ".backup." + UUID().uuidString)
         } catch {
-            sheetManager.closeAll()
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                sheetManager.showAlert(title: "Error", message: "Failed to rename .MOV file: \(error.localizedDescription)")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                showErrorAlert = true
+                errorAlertMessage = "Failed to rename .MOV file: \(error.localizedDescription)"
             }
-            
         }
             
         exportSession.exportAsynchronously {
@@ -137,7 +143,7 @@ struct LiveWallpaperEditorView: View {
                                 try heicData.write(to: URL(filePath: liveWallpaper!.wallpaper.stillImagePath))
                                 
                                 let adjusted = liveWallpaper!.wallpaper.wallpaperRootDirectory + "/input.segmentation/asset.resource/Adjusted.HEIC"
-                                let proxy =  liveWallpaper!.wallpaper.wallpaperRootDirectory + "/input.segmentation/asset.resource/proxy.heic";
+                                let proxy = liveWallpaper!.wallpaper.wallpaperRootDirectory + "/input.segmentation/asset.resource/proxy.heic";
                                 
                                 if(FileManager.default.fileExists(atPath: adjusted)) {
                                     try FileManager.default.removeItem(atPath: adjusted);
@@ -148,12 +154,9 @@ struct LiveWallpaperEditorView: View {
                                 }
                                                             
                                 if(!FileManager.default.fileExists(atPath: liveWallpaper!.wallpaper.contentsPath)) {
-                                    DispatchQueue.main.async {
-                                        sheetManager.closeAll()
-                                        
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                            sheetManager.showAlert(title: "Error", message: "Contents.json file does not exist.")
-                                        }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                        showErrorAlert = true
+                                        errorAlertMessage = "Contents.json file does not exist."
                                     }
                                     return
                                 }
@@ -212,43 +215,29 @@ struct LiveWallpaperEditorView: View {
                                     
                                     let wallpaper = Wallpaper()
                                     wallpaper.deleteSnapshots(liveWallpaper!.wallpaper.wallpaperVersionDirectory)
-                                    wallpaper.restartPoster()
-                                 
-                                    DispatchQueue.main.async {
-                                        sheetManager.closeAll()
-                                        
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                            sheetManager.showAlert(title: "Success", message: "Live wallpaper is successfully changed.\n\nIf the last frame is different than from the video, try changing the wallpaper to another one and then change back.")
-                                        }
-                                    }
+
+                                    sheetManager.closeAll()
+                                    wallpaper.respring()
                                 } catch {
-                                    DispatchQueue.main.async {
-                                        sheetManager.closeAll()
-                                        
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                            sheetManager.showAlert(title: "Error", message: "Failed to patch Contents.json: \(error)")
-                                        }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                        showErrorAlert = true
+                                        errorAlertMessage = "Failed to patch Contents.json: \(error)"
                                     }
                                 }
                             } catch {
-                                DispatchQueue.main.async {
-                                    sheetManager.closeAll()
-                                    
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                        sheetManager.showAlert(title: "Error", message: "Failed to export HEIC image: \(error.localizedDescription)")
-                                    }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                    showErrorAlert = true
+                                    errorAlertMessage = "Failed to export HEIC image: \(error.localizedDescription)"
                                 }
                             }
                         }
                     }
                 }
+                break
             default:
-                DispatchQueue.main.async {
-                    sheetManager.closeAll()
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        sheetManager.showAlert(title: "Error", message: "Failed to export video: \(exportSession.error.debugDescription)")
-                    }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    showErrorAlert = true
+                    errorAlertMessage = "Failed to export video: \(exportSession.error.debugDescription)"
                 }
             }
         }
