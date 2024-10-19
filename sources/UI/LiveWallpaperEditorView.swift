@@ -37,6 +37,9 @@ struct LiveWallpaperEditorView: View {
                 }
             )
         }
+        .sheet(isPresented: $sheetManager.cropGuide, content: {
+            CropGuideView(sheetManager: sheetManager)
+        })
         .padding()
         .preferredColorScheme(.light)
         .background(.white)
@@ -66,7 +69,6 @@ struct LiveWallpaperEditorView: View {
         let tolerance: Double = 0.09
 
         if abs(durationSeconds - targetDuration) > tolerance {
-            sheetManager.closeAll()
             sheetManager.cropGuide = true
             return
         }
@@ -82,7 +84,6 @@ struct LiveWallpaperEditorView: View {
         let screenAspectRatio = screenWidth / screenHeight
 
         if abs(videoAspectRatio - screenAspectRatio) > 0.01 {
-            sheetManager.closeAll()
             sheetManager.cropGuide = true
             return
         }

@@ -101,9 +101,11 @@ struct BlossomView: View {
         .sheet(isPresented: $sheetManager.wallpaperSelector, content: {
             WallpaperSelectorModal(sheetManager: sheetManager)
         })
-        .sheet(isPresented: $sheetManager.cropGuide, content: {
-            CropGuideView()
-        })
+        .onChange(of: sheetManager.cropGuide) {
+            if !sheetManager.cropGuide {
+                sheetManager.closeAll()
+            }
+        }
         .preferredColorScheme(.light)
     }
 }
