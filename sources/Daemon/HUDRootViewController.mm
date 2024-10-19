@@ -135,7 +135,7 @@ static void SpringBoardLockStatusChanged
     
     [wallpaper restartPoster];
     
-    double interval = 5.2;
+    double interval = 5.3;
 
     [NSTimer scheduledTimerWithTimeInterval:interval repeats: true block: ^(NSTimer * _Nonnull timer) {
         [wallpaper restartPoster];

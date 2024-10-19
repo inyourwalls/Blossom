@@ -123,7 +123,13 @@ struct LiveWallpaperEditorView: View {
                 imageGenerator.generateCGImagesAsynchronously(forTimes: [NSValue(time: lastFrameTime)]) { _, image, _, result, _ in
                     if result == .succeeded, let cgImage = image {
                         let uiImage = UIImage(cgImage: cgImage)
-                        
+                        let targetSize = CGSize(width: screenWidth, height: screenHeight)
+                                
+                        UIGraphicsBeginImageContextWithOptions(targetSize, false, 0.0)
+                        uiImage.draw(in: CGRect(origin: .zero, size: targetSize))
+                        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+                        UIGraphicsEndImageContext()
+                
                         if let heicData = uiImage.heicData(compressionQuality: 1.0) {
                             do {
                                 try FileManager.default.moveItem(atPath: liveWallpaper!.wallpaper.stillImagePath, toPath: liveWallpaper!.wallpaper.stillImagePath + ".backup." + UUID().uuidString)
