@@ -51,9 +51,12 @@ struct LiveWallpaperEditorView: View {
         // TODO: Create a video showing how to crop the wallpaper and open a guide view
         
         let durationSeconds = CMTimeGetSeconds(videoAsset.duration)
-        if CMTimeCompare(videoAsset.duration, CMTime(seconds: 5, preferredTimescale: 600)) != 0 {
+        let targetDuration: Double = 5.0
+        let tolerance: Double = 0.09
+
+        if abs(durationSeconds - targetDuration) > tolerance {
             sheetManager.closeAll()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 sheetManager.showAlert(title: "Error", message: "Video must be exactly 5.0 seconds long.\nDuration of the selected video: \(durationSeconds)s")
             }
             return
@@ -66,14 +69,16 @@ struct LiveWallpaperEditorView: View {
         let screenWidth = UIScreen.main.bounds.size.width * UIScreen.main.scale
         let screenHeight = UIScreen.main.bounds.size.height * UIScreen.main.scale
         
-        if videoSize.width != screenWidth || videoSize.height != screenHeight {
+        let videoAspectRatio = videoSize.width / videoSize.height
+        let screenAspectRatio = screenWidth / screenHeight
+
+        if abs(videoAspectRatio - screenAspectRatio) > 0.01 {
             sheetManager.closeAll()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                sheetManager.showAlert(title: "Error", message: "Video should be exactly your screen resolution - \(screenWidth)x\(screenHeight).\nResolution of the selected video: \(size.width)x\(size.height)")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                sheetManager.showAlert(title: "Error", message: "Video should have the same aspect ratio as your screen.")
             }
             return
         }
-        
         let exportSession = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)!
         exportSession.outputURL = URL(filePath: liveWallpaper!.wallpaper.path)
         exportSession.outputFileType = .mov
@@ -86,7 +91,7 @@ struct LiveWallpaperEditorView: View {
         } catch {
             sheetManager.closeAll()
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 sheetManager.showAlert(title: "Error", message: "Failed to rename .MOV file: \(error.localizedDescription)")
             }
             
@@ -126,7 +131,7 @@ struct LiveWallpaperEditorView: View {
                                     DispatchQueue.main.async {
                                         sheetManager.closeAll()
                                         
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                             sheetManager.showAlert(title: "Error", message: "Contents.json file does not exist.")
                                         }
                                     }
@@ -192,7 +197,7 @@ struct LiveWallpaperEditorView: View {
                                     DispatchQueue.main.async {
                                         sheetManager.closeAll()
                                         
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                             sheetManager.showAlert(title: "Success", message: "Live wallpaper is successfully changed.\nNote that if you wish to edit lockscreen widgets or other wallpaper settings, the video will be reset.")
                                         }
                                     }
@@ -200,7 +205,7 @@ struct LiveWallpaperEditorView: View {
                                     DispatchQueue.main.async {
                                         sheetManager.closeAll()
                                         
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                             sheetManager.showAlert(title: "Error", message: "Failed to patch Contents.json: \(error)")
                                         }
                                     }
@@ -209,7 +214,7 @@ struct LiveWallpaperEditorView: View {
                                 DispatchQueue.main.async {
                                     sheetManager.closeAll()
                                     
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                         sheetManager.showAlert(title: "Error", message: "Failed to export HEIC image: \(error.localizedDescription)")
                                     }
                                 }
@@ -221,7 +226,7 @@ struct LiveWallpaperEditorView: View {
                 DispatchQueue.main.async {
                     sheetManager.closeAll()
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         sheetManager.showAlert(title: "Error", message: "Failed to export video: \(exportSession.error.debugDescription)")
                     }
                 }
