@@ -86,6 +86,20 @@ struct LiveWallpaperEditorView: View {
         let timeRange = CMTimeRange(start: .zero, duration: CMTime(seconds: 5, preferredTimescale: 600))
         exportSession.timeRange = timeRange
         
+        let composition = AVMutableComposition()
+        guard let videoTrack = videoAsset.tracks(withMediaType: .video).first else { return }
+
+        let videoComposition = AVMutableVideoComposition(asset: videoAsset) { request in
+            let source = request.sourceImage.clampedToExtent()
+            
+            let targetSize = CGSize(width: screenWidth, height: screenHeight)
+            let transform = CGAffineTransform(scaleX: targetSize.width / source.extent.width,
+                                               y: targetSize.height / source.extent.height)
+            
+            let resizedImage = source.transformed(by: transform)
+            request.finish(with: resizedImage, context: nil)
+        }
+        
         do {
             try FileManager.default.moveItem(atPath: liveWallpaper!.wallpaper.path, toPath: liveWallpaper!.wallpaper.path + ".backup." + UUID().uuidString)
         } catch {
@@ -104,7 +118,7 @@ struct LiveWallpaperEditorView: View {
                 imageGenerator.requestedTimeToleranceAfter = .zero
                 imageGenerator.requestedTimeToleranceBefore = .zero
                 
-                let lastFrameTime = CMTime(seconds: 5.0, preferredTimescale: 600)
+                let lastFrameTime = CMTime(seconds: durationSeconds, preferredTimescale: 600)
                 
                 imageGenerator.generateCGImagesAsynchronously(forTimes: [NSValue(time: lastFrameTime)]) { _, image, _, result, _ in
                     if result == .succeeded, let cgImage = image {
@@ -198,7 +212,7 @@ struct LiveWallpaperEditorView: View {
                                         sheetManager.closeAll()
                                         
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                            sheetManager.showAlert(title: "Success", message: "Live wallpaper is successfully changed.\nNote that if you wish to edit lockscreen widgets or other wallpaper settings, the video will be reset.")
+                                            sheetManager.showAlert(title: "Success", message: "Live wallpaper is successfully changed.\n\nIf the last frame is different than from the video, try changing the wallpaper to another one and then change back.")
                                         }
                                     }
                                 } catch {
