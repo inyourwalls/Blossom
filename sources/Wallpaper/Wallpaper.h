@@ -50,6 +50,7 @@
 - (void) enumerateProcessesUsingBlock:(void (^)(pid_t pid, NSString *executablePath, BOOL *stop))enumerator;
 - (void) killall: (NSString*) processName withSoftly: (BOOL) softly;
 - (void) restartPoster;
+- (void) restartPosterBoard;
 - (void) respring;
 - (void) deleteSnapshots: (NSString*) wallpaperRootPath;
 

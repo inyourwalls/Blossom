@@ -161,7 +161,11 @@
 }
 
 - (void)restartPoster {
-    [self killall:@"PhotosPosterProvider" withSoftly:TRUE];
+    [self killall:@"PhotosPosterProvider" withSoftly:FALSE];
+}
+
+- (void)restartPosterBoard {
+    [self killall:@"PosterBoard" withSoftly:FALSE];
 }
 
 - (void)respring {

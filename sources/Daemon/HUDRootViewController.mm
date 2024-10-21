@@ -29,7 +29,7 @@ static void LaunchServicesApplicationStateChanged
     
     for (LSApplicationProxy *app in [[objc_getClass("LSApplicationWorkspace") defaultWorkspace] allApplications])
     {
-        if ([app.applicationIdentifier isEqualToString:@"ch.xxtou.hudapp"])
+        if ([app.applicationIdentifier isEqualToString:@"com.inyourwalls.blossom"])
         {
             isAppInstalled = YES;
             break;
@@ -42,38 +42,6 @@ static void LaunchServicesApplicationStateChanged
         [app terminateWithSuccess];
     }
 }
-
-#if !TARGET_IPHONE_SIMULATOR
-static void SpringBoardLockStatusChanged
-(CFNotificationCenterRef center,
- void *observer,
- CFStringRef name,
- const void *object,
- CFDictionaryRef userInfo)
-{
-    NSString *lockState = (__bridge NSString *)name;
-    if ([lockState isEqualToString:@NOTIFY_UI_LOCKSTATE])
-    {
-        mach_port_t sbsPort = SBSSpringBoardServerPort();
-        
-        if (sbsPort == MACH_PORT_NULL)
-            return;
-        
-        BOOL isLocked;
-        BOOL isPasscodeSet;
-        SBGetScreenLockStatus(sbsPort, &isLocked, &isPasscodeSet);
-
-        if (!isLocked)
-        {
-//            [rootViewController.view setHidden:NO];
-        }
-        else
-        {
-//            [rootViewController.view setHidden:YES];
-        }
-    }
-}
-#endif
 
 #pragma mark - HUDRootViewController
 
@@ -90,27 +58,30 @@ static void SpringBoardLockStatusChanged
     notify_register_dispatch(NOTIFY_RELOAD_HUD, &token, dispatch_get_main_queue(), ^(int token) {
         
     });
-
-    CFNotificationCenterRef darwinCenter = CFNotificationCenterGetDarwinNotifyCenter();
     
-    CFNotificationCenterAddObserver(
-        darwinCenter,
-        (__bridge const void *)self,
-        LaunchServicesApplicationStateChanged,
-        CFSTR(NOTIFY_LS_APP_CHANGED),
-        NULL,
-        CFNotificationSuspensionBehaviorCoalesce
-    );
-    
-    CFNotificationCenterAddObserver(
-        darwinCenter,
-        (__bridge const void *)self,
-        SpringBoardLockStatusChanged,
-        CFSTR(NOTIFY_UI_LOCKSTATE),
-        NULL,
-        CFNotificationSuspensionBehaviorCoalesce
-    );
+    [[NSNotificationCenter defaultCenter] addObserver:self
+        selector:@selector(screenBrightnessDidChange:)
+        name:UIScreenBrightnessDidChangeNotification
+        object:nil];
 #endif
+}
+
+- (void)screenBrightnessDidChange:(NSNotification *)notification {
+    CGFloat brightness = [UIScreen mainScreen].brightness;
+
+    if(brightness < 0.1) {
+        if(!self.isPaused) {
+            [[self wallpaperTimer] invalidate];
+            self.isPaused = YES;
+        }
+    } else {
+        if(self.isPaused) {
+            self.wallpaperTimer = [NSTimer scheduledTimerWithTimeInterval:[self interval] repeats:true block:^(NSTimer * _Nonnull timer) {
+                [[self wallpaper] restartPoster];
+            }];
+            self.isPaused = NO;
+        }
+    }
 }
 
 - (BOOL)usesCustomFontSize { return NO; }
@@ -122,6 +93,10 @@ static void SpringBoardLockStatusChanged
 - (instancetype)init
 {
     self = [super init];
+    
+    self.wallpaper = [[Wallpaper alloc] init];
+    self.interval = 5.3;
+    
     if (self) {
         [self registerNotifications];
     }
@@ -131,14 +106,10 @@ static void SpringBoardLockStatusChanged
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    Wallpaper *wallpaper = [[Wallpaper alloc] init];
-    
-    [wallpaper restartPoster];
-    
-    double interval = 5.3;
+    [[self wallpaper] restartPoster];
 
-    [NSTimer scheduledTimerWithTimeInterval:interval repeats: true block: ^(NSTimer * _Nonnull timer) {
-        [wallpaper restartPoster];
+    self.wallpaperTimer = [NSTimer scheduledTimerWithTimeInterval:[self interval] repeats: true block: ^(NSTimer * _Nonnull timer) {
+        [[self wallpaper] restartPoster];
     }];
 }
 

@@ -34,7 +34,6 @@ struct BlossomView: View {
                         .padding(.bottom, 5)
                     ) {
                         Button(action: {
-                            isLoopEnabled = false
                             sheetManager.wallpaperSelector = true
                         }) {
                             HStack {

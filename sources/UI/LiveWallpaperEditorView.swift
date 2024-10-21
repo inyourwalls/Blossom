@@ -218,6 +218,7 @@ struct LiveWallpaperEditorView: View {
                                     wallpaper.deleteSnapshots(liveWallpaper!.wallpaper.wallpaperVersionDirectory)
 
                                     sheetManager.closeAll()
+                                    wallpaper.restartPosterBoard()
                                     wallpaper.respring()
                                 } catch {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
