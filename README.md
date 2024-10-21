@@ -35,6 +35,10 @@ https://github.com/user-attachments/assets/361c9bbe-9788-44d6-b501-de690fff9144
 
 If it looks like a crash whenever you try to select a photo for the wallpaper, disable "Loop" in the app and then you'll be able to create wallpapers again.
 
+### There are frame jumps or fade out to black
+
+If you notice frame jumps on the last second of the video or if you notice the video fading to black for a second - you have to switch to another wallpaper, disable looping, switch back to your live wallpaper and wait for 5 seconds - and enable looping afterwards. It should fix itself.
+
 ### Does it consume battery?
 
 It uses as much battery as a normal live photo.
