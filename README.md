@@ -25,9 +25,10 @@ Download the **.tipa** file from [Releases](https://github.com/inyourwalls/Bloss
 https://github.com/user-attachments/assets/361c9bbe-9788-44d6-b501-de690fff9144
 
 2. Create a Live Photo wallpaper in iOS. Make sure to configure widgets, clock style, etc., now, as you **cannot** edit the wallpaper afterwards.
-3. Open Blossom and click "Set Wallpaper", select your recently created wallpaper and any custom video.
 
-> By default, live wallpapers play whenever you unlock the screen. You can make it loop by toggling the relevant setting in the app.
+**Note:** If you encounter issues with setting a Live Photo as a wallpaper through camera roll or Photos app, you can use [apps like this one](https://apps.apple.com/de/app/video-to-live-photos-maker/id1596786737) to do so, because it's a bit bugged in iOS 17.0.
+
+3. Open Blossom and click "Set Wallpaper", select your recently created wallpaper and any custom video.
 
 ## FAQ
 
