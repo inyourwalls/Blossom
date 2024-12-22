@@ -80,7 +80,7 @@ struct WallpaperSelectorModal: View {
                     self.selectedUserVideo = nil
                 }
         }
-        .onChange(of: selectedUserVideo) {
+        .onChange(of: selectedUserVideo) { newValue in
             if let selectedUserVideo = selectedUserVideo {
                 sheetManager.selectedWallpaper = WallpaperSelection(wallpaper: selectedLiveWallpaper!, userVideo: selectedUserVideo)
             }

@@ -13,8 +13,19 @@ struct LiveWallpaperEditorView: View {
     @State private var player = AVPlayer()
     @State private var videoURL: URL? = nil
     
-    @State private var showErrorAlert = false
-    @State private var errorAlertMessage = ""
+    @State private var activeAlert: SheetAlert?
+    
+    @State private var ignoreFileSizeCheck: Bool = false
+    
+    struct SheetAlert: Identifiable {
+        let id = UUID()
+        let title: String
+        let message: String
+        let primaryAction: (() -> Void)?
+        let secondaryAction: (() -> Void)?
+        let primaryText: String?
+        let secondaryText: String?
+    }
     
     var body: some View {
         VStack {
@@ -28,14 +39,25 @@ struct LiveWallpaperEditorView: View {
                 loadVideo(liveWallpaper.userVideo)
             }
         }
-        .alert(isPresented: $showErrorAlert) {
-            Alert(
-                title: Text("Error"),
-                message: Text(errorAlertMessage),
-                dismissButton: .default(Text("OK")) {
-                    sheetManager.closeAll()
-                }
-            )
+        .alert(item: $activeAlert) { alert in
+            if let primaryAction = alert.primaryAction, let secondaryAction = alert.secondaryAction {
+                return Alert(
+                    title: Text(alert.title),
+                    message: Text(alert.message),
+                    primaryButton: .default(Text(alert.primaryText ?? "")) {
+                        primaryAction()
+                    },
+                    secondaryButton: .default(Text(alert.secondaryText ?? "")) {
+                        secondaryAction()
+                    }
+                )
+            } else {
+                return Alert(
+                    title: Text(alert.title),
+                    message: Text(alert.message),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
         }
         .sheet(isPresented: $sheetManager.cropGuide, content: {
             CropGuideView(sheetManager: sheetManager)
@@ -62,32 +84,86 @@ struct LiveWallpaperEditorView: View {
     }
     
     private func setWallpaper() {
-        var videoAsset = player.currentItem!.asset
+        let videoAsset = player.currentItem!.asset
         
         let durationSeconds = CMTimeGetSeconds(videoAsset.duration)
         let targetDuration: Double = 5.0
         let tolerance: Double = 0.09
 
-        if abs(durationSeconds - targetDuration) > tolerance {
-            sheetManager.cropGuide = true
-            return
-        }
-
         let track = videoAsset.tracks(withMediaType: AVMediaType.video).first!
         let size = track.naturalSize.applying(track.preferredTransform)
-        let videoSize = CGSize(width: fabs(size.width), height: fabs(size.height))
 
+        let videoSize = CGSize(width: fabs(size.width), height: fabs(size.height))
         let screenWidth = UIScreen.main.bounds.size.width * UIScreen.main.scale
         let screenHeight = UIScreen.main.bounds.size.height * UIScreen.main.scale
         
         let videoAspectRatio = videoSize.width / videoSize.height
         let screenAspectRatio = screenWidth / screenHeight
-
-        if abs(videoAspectRatio - screenAspectRatio) > 0.01 {
+        
+        if abs(durationSeconds - targetDuration) > tolerance {
             sheetManager.cropGuide = true
             return
         }
         
+        let fileSize = self.assetFileSize(player: player)
+        if !ignoreFileSizeCheck && fileSize >= 7 {
+            let formattedFileSize = String(format: "%.2f", fileSize)
+            activeAlert = SheetAlert(
+                title: "Warning",
+                message: "The selected video file size is \(formattedFileSize)MB. The recommended file size is below 7MB. If the wallpaper appears blank, you should compress the file. Continue anyway?",
+                primaryAction: { self.ignoreFileSizeCheck = true; self.setWallpaper() },
+                secondaryAction: { sheetManager.closeAll() },
+                primaryText: "Continue anyway",
+                secondaryText: "Cancel"
+            )
+            return
+        }
+        
+        if abs(videoAspectRatio - screenAspectRatio) > 0.01 {
+            activeAlert = SheetAlert(
+                title: "Warning",
+                message: "The selected video file must have \(screenWidth)x\(screenHeight) resolution.\nYou can continue anyway, but the end result might look wrong.\nYou can also check the video guide about fixing this issue using default Photos app.",
+                primaryAction: { self.patch(resizeHEIC: false) },
+                secondaryAction: { sheetManager.cropGuide = true },
+                primaryText: "Continue anyway",
+                secondaryText: "View guide"
+            )
+            return
+        }
+        
+        self.patch(resizeHEIC: true)
+    }
+    
+    private func assetFileSize(player: AVPlayer) -> Double {
+        guard let currentItem = player.currentItem,
+              let urlAsset = currentItem.asset as? AVURLAsset else {
+            print("Unable to get URL from asset.")
+            return 0
+        }
+        
+        let fileURL = urlAsset.url
+        do {
+            let fileAttributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
+            
+            if let fileSize = fileAttributes[.size] as? UInt64 {
+                let fileSizeInMB = Double(fileSize) / (1024 * 1024)
+                return fileSizeInMB
+            }
+        } catch {
+            print("Error retrieving file attributes: \(error)")
+        }
+        
+        return 0
+    }
+    
+    private func patch(resizeHEIC: Bool) {
+        let videoAsset = player.currentItem!.asset
+        
+        let screenWidth = UIScreen.main.bounds.size.width * UIScreen.main.scale
+        let screenHeight = UIScreen.main.bounds.size.height * UIScreen.main.scale
+    
+        let durationSeconds = CMTimeGetSeconds(videoAsset.duration)
+    
         let exportSession = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)!
         exportSession.outputURL = URL(filePath: liveWallpaper!.wallpaper.path)
         exportSession.outputFileType = .mov
@@ -98,23 +174,30 @@ struct LiveWallpaperEditorView: View {
         let composition = AVMutableComposition()
         guard let videoTrack = videoAsset.tracks(withMediaType: .video).first else { return }
 
-        let videoComposition = AVMutableVideoComposition(asset: videoAsset) { request in
-            let source = request.sourceImage.clampedToExtent()
-            
-            let targetSize = CGSize(width: screenWidth, height: screenHeight)
-            let transform = CGAffineTransform(scaleX: targetSize.width / source.extent.width,
-                                               y: targetSize.height / source.extent.height)
-            
-            let resizedImage = source.transformed(by: transform)
-            request.finish(with: resizedImage, context: nil)
+        if resizeHEIC {
+            let videoComposition = AVMutableVideoComposition(asset: videoAsset) { request in
+                let source = request.sourceImage.clampedToExtent()
+                
+                let targetSize = CGSize(width: screenWidth, height: screenHeight)
+                let transform = CGAffineTransform(scaleX: targetSize.width / source.extent.width, y: targetSize.height / source.extent.height)
+                
+                let resizedImage = source.transformed(by: transform)
+                request.finish(with: resizedImage, context: nil)
+            }
         }
         
         do {
             try FileManager.default.moveItem(atPath: liveWallpaper!.wallpaper.path, toPath: liveWallpaper!.wallpaper.path + ".backup." + UUID().uuidString)
         } catch {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                showErrorAlert = true
-                errorAlertMessage = "Failed to rename .MOV file: \(error.localizedDescription)"
+                activeAlert = SheetAlert(
+                    title: "Error",
+                    message: "Failed to rename .MOV file: \(error.localizedDescription)",
+                    primaryAction: nil,
+                    secondaryAction: nil,
+                    primaryText: nil,
+                    secondaryText: nil
+                )
             }
         }
             
@@ -132,10 +215,12 @@ struct LiveWallpaperEditorView: View {
                         let uiImage = UIImage(cgImage: cgImage)
                         let targetSize = CGSize(width: screenWidth, height: screenHeight)
                                 
-                        UIGraphicsBeginImageContextWithOptions(targetSize, false, 0.0)
-                        uiImage.draw(in: CGRect(origin: .zero, size: targetSize))
-                        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-                        UIGraphicsEndImageContext()
+                        if resizeHEIC {
+                            UIGraphicsBeginImageContextWithOptions(targetSize, false, 0.0)
+                            uiImage.draw(in: CGRect(origin: .zero, size: targetSize))
+                            let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+                            UIGraphicsEndImageContext()
+                        }
                 
                         if let heicData = uiImage.heicData(compressionQuality: 1.0) {
                             do {
@@ -156,8 +241,14 @@ struct LiveWallpaperEditorView: View {
                                                             
                                 if(!FileManager.default.fileExists(atPath: liveWallpaper!.wallpaper.contentsPath)) {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                        showErrorAlert = true
-                                        errorAlertMessage = "Contents.json file does not exist."
+                                        activeAlert = SheetAlert(
+                                            title: "Error",
+                                            message: "Contents.json file does not exist.",
+                                            primaryAction: nil,
+                                            secondaryAction: nil,
+                                            primaryText: nil,
+                                            secondaryText: nil
+                                        )
                                     }
                                     return
                                 }
@@ -222,14 +313,26 @@ struct LiveWallpaperEditorView: View {
                                     wallpaper.respring()
                                 } catch {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                        showErrorAlert = true
-                                        errorAlertMessage = "Failed to patch Contents.json: \(error)"
+                                        activeAlert = SheetAlert(
+                                            title: "Error",
+                                            message: "Failed to patch Contents.json: \(error)",
+                                            primaryAction: nil,
+                                            secondaryAction: nil,
+                                            primaryText: nil,
+                                            secondaryText: nil
+                                        )
                                     }
                                 }
                             } catch {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                    showErrorAlert = true
-                                    errorAlertMessage = "Failed to export HEIC image: \(error.localizedDescription)"
+                                    activeAlert = SheetAlert(
+                                        title: "Error",
+                                        message: "Failed to export HEIC image: \(error.localizedDescription)",
+                                        primaryAction: nil,
+                                        secondaryAction: nil,
+                                        primaryText: nil,
+                                        secondaryText: nil
+                                    )
                                 }
                             }
                         }
@@ -238,8 +341,14 @@ struct LiveWallpaperEditorView: View {
                 break
             default:
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    showErrorAlert = true
-                    errorAlertMessage = "Failed to export video: \(exportSession.error.debugDescription)"
+                    activeAlert = SheetAlert(
+                        title: "Error",
+                        message: "Failed to export video: \(exportSession.error.debugDescription)",
+                        primaryAction: nil,
+                        secondaryAction: nil,
+                        primaryText: nil,
+                        secondaryText: nil
+                    )
                 }
             }
         }

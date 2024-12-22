@@ -103,11 +103,11 @@ struct BlossomView: View {
                     }
                 }
             }
-            .onChange(of: isLoopEnabled) {
+            .onChange(of: isLoopEnabled) { newValue in
                 if isInitialized {
                     daemon.toggle()
                     
-                    if isLoopEnabled {
+                    if newValue {
                         showAlert = true
                         alertMessage = "While this option is active, you are not able to create new wallpapers in iOS.\nDisable this to make a new wallpaper."
                     }
@@ -148,7 +148,7 @@ struct BlossomView: View {
         .sheet(isPresented: $sheetManager.wallpaperSelector, content: {
             WallpaperSelectorModal(sheetManager: sheetManager)
         })
-        .onChange(of: sheetManager.cropGuide) {
+        .onChange(of: sheetManager.cropGuide) { newValue in
             if !sheetManager.cropGuide {
                 sheetManager.closeAll()
             }
