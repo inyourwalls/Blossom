@@ -6,9 +6,7 @@
 #import "UIApplication+Private.h"
 #import "HUDRootViewController.h"
 
-#if !TARGET_IPHONE_SIMULATOR
 #import "Blossom-Swift.h"
-#endif
 
 #define HUD_TRANSITION_DURATION 0.25
 
@@ -64,14 +62,12 @@ static BOOL _gShouldToggleHUDAfterLaunch = NO;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-#if !TARGET_IPHONE_SIMULATOR
     BlossomViewController *controller = [[BlossomViewController alloc] init];
     [self addChildViewController:controller];
     [self.view addSubview:controller.view];
     
     controller.view.frame = self.view.bounds;
     [controller didMoveToParentViewController:self];
-#endif
     
     [self registerNotifications];
 }

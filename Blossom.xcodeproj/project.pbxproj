@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C10649702D17EB7C00D2AC84 /* ConditionalNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C106496F2D17EB7C00D2AC84 /* ConditionalNavigationView.swift */; };
 		C1301E972CC296F500EC6C20 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1301E962CC296F500EC6C20 /* SheetManager.swift */; };
 		C1301E992CC29C6400EC6C20 /* WallpaperContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1301E982CC29C6400EC6C20 /* WallpaperContents.swift */; };
 		C13691E12CC3DCCD00C6967C /* CropGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13691E02CC3DCCD00C6967C /* CropGuideView.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C106496F2D17EB7C00D2AC84 /* ConditionalNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalNavigationView.swift; sourceTree = "<group>"; };
 		C1301E962CC296F500EC6C20 /* SheetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
 		C1301E982CC29C6400EC6C20 /* WallpaperContents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperContents.swift; sourceTree = "<group>"; };
 		C13691E02CC3DCCD00C6967C /* CropGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropGuideView.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				C13796862CC18D76009AA80B /* LiveWallpaperEditorView.swift */,
 				C1301E962CC296F500EC6C20 /* SheetManager.swift */,
 				C13691E02CC3DCCD00C6967C /* CropGuideView.swift */,
+				C106496F2D17EB7C00D2AC84 /* ConditionalNavigationView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 				CC711D4D2B5BF5C6007235A6 /* MainApplicationDelegate.mm in Sources */,
 				CC711D602B5BF5C6007235A6 /* HUDRootViewController.mm in Sources */,
 				CC711D4E2B5BF5C6007235A6 /* HUDMainApplicationDelegate.mm in Sources */,
+				C10649702D17EB7C00D2AC84 /* ConditionalNavigationView.swift in Sources */,
 				C1D0B91D2CC0567100F3F5E4 /* BlossomViewController.swift in Sources */,
 				C13796872CC18D76009AA80B /* LiveWallpaperEditorView.swift in Sources */,
 				CC711D4C2B5BF5C6007235A6 /* HUDMainWindow.mm in Sources */,
@@ -537,7 +541,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "supports/hudapp-bridging-header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -582,7 +586,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "supports/hudapp-bridging-header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

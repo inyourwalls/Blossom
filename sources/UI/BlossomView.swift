@@ -14,14 +14,18 @@ struct BlossomView: View {
     private var daemon: Daemon = Daemon()
     
     var body: some View {
-        NavigationView {
+        ConditionalNavigationView {
             VStack(spacing: 10) {
-                Image(uiImage: UIImage(named: "AppIcon")!)
+                Spacer()
+                
+                Image(uiImage: UIImage(named: "Icon")!)
                     .resizable()
                     .frame(width: 300, height: 300)
                     .cornerRadius(10)
-                    .padding(.top, 120)
-                    .padding(.bottom, 120)
+                    .padding(.top, 10)
+                    .padding(.bottom, 10)
+                
+                Spacer()
             
                 List {
                     Section(header:
@@ -64,6 +68,7 @@ struct BlossomView: View {
                 }
                 .listStyle(InsetGroupedListStyle())
                 .scrollDisabled(true)
+                .frame(height: 190)
             }
             .navigationTitle("Blossom")
             .navigationBarTitleDisplayMode(.inline)

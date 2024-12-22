@@ -8,8 +8,13 @@ struct CropGuideView: View {
     
     var body: some View {
         ZStack {
-            LiveWallpaperView(wallpaperPath: "setup", player: AVPlayer(url: createLocalUrl(for: "setup", ofType: "mov")! as URL))
-
+            if let url = createLocalUrl(for: "setup", ofType: "mov") {
+                LiveWallpaperView(wallpaperPath: "setup", player: AVPlayer(url: url))
+            } else {
+                Text("Unable to load video.")
+                    .padding()
+            }
+            
             if showText {
                 let width = Int( UIScreen.main.bounds.size.width * UIScreen.main.scale)
                 let height = Int(UIScreen.main.bounds.size.height * UIScreen.main.scale)
