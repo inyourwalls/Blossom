@@ -2,12 +2,16 @@ import SwiftUI
 
 struct BlossomView: View {
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     @State private var isLoopEnabled: Bool = false
     @State private var isInitialized: Bool = false
     @State private var interactionAllowed: Bool = false
     
     @State private var showAlert = false
     @State private var alertMessage = ""
+    
+    @State private var aboutAlert = false
     
     @ObservedObject var sheetManager: SheetManager = SheetManager()
     
@@ -65,13 +69,40 @@ struct BlossomView: View {
                                 .disabled(!interactionAllowed)
                         }
                     }
+                    
+                    if horizontalSizeClass != .compact {
+                        Section {
+                            Button(action: {
+                                self.aboutAlert = true
+                            }) {
+                                HStack {
+                                    Image(systemName: "info.circle")
+                                        .foregroundColor(.purple)
+                                        .frame(width: 30, height: 30)
+                                    
+                                    Text("About")
+                                        .foregroundStyle(.black)
+                                }
+                            }
+                        }
+                    }
                 }
                 .listStyle(InsetGroupedListStyle())
                 .scrollDisabled(true)
-                .frame(height: 190)
+                .frame(height: horizontalSizeClass == .compact ? 190 : 260)
             }
             .navigationTitle("Blossom")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        aboutAlert = true
+                    }) {
+                        Image(systemName: "info.circle") .font(.title3)
+                            .foregroundStyle(.purple)
+                    }
+                }
+            }
             .onChange(of: isLoopEnabled) {
                 if isInitialized {
                     daemon.toggle()
@@ -100,6 +131,18 @@ struct BlossomView: View {
                 title: Text("Blossom"),
                 message: Text(alertMessage),
                 dismissButton: .default(Text("OK"))
+            )
+        }
+        .alert(isPresented: $aboutAlert) {
+            Alert(
+                title: Text("Blossom"),
+                message: Text("iOS 17 offers the ability to set a live photo as your wallpaper, but it comes with limitations and doesn’t even work as expected.\n\nThis app allows you to swap live photo from camera roll with a custom 5 second video and make it loop if desired.\n\nIf you encounter any issues, refer to the FAQ section in the GitHub repository."),
+                primaryButton: .default(Text("Close")),
+                secondaryButton: .default(Text("Visit GitHub repository")) {
+                    if let url = URL(string: "https://github.com/inyourwalls/Blossom") {
+                        UIApplication.shared.open(url)
+                    }
+                }
             )
         }
         .sheet(isPresented: $sheetManager.wallpaperSelector, content: {
