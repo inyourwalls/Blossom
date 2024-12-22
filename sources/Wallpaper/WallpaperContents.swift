@@ -1,5 +1,5 @@
 struct Contents: Codable {
-    var version: Int
+    var version: Double
     var layers: [Layer]
     var properties: Properties
 }
@@ -7,7 +7,7 @@ struct Contents: Codable {
 struct Layer: Codable {
     var frame: Frame
     var filename: String
-    var zPosition: Int
+    var zPosition: Double
     var identifier: String
 }
 
@@ -33,7 +33,7 @@ struct Properties: Codable {
 }
 
 struct Layout: Codable {
-    var clockIntersection: Int
+    var clockIntersection: Double
     var deviceResolution: Resolution
     var visibleFrame: Frame
     var timeFrame: Frame
