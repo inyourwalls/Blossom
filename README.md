@@ -45,6 +45,10 @@ It uses as much battery as a normal live photo.
 
 However, if you decide to loop the video, it will consume some additional battery.
 
+### My wallpaper is blank after respring
+
+The recommended filesize for a wallpaper is 7 megabytes. If the file size is larger, iOS might not load the video for some reason.
+
 ### Can the video be longer than 5 seconds?
 
 No, that's a system limitation. This is not a tweak.
