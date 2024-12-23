@@ -13,14 +13,15 @@ class VideoCropperViewController: UIViewController {
     var trimStartTime: CMTime = CMTime()
     var trimEndTime: CMTime = CMTime()
     var onComplete: ((AVAsset, UIImage) -> Void)?
+    var onLoading: ((Bool) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if UIDevice.current.userInterfaceIdiom == .pad {
-            videoCropView.setAspectRatio(CGSize(width: 3, height: 2), animated: false)
+            videoCropView.setAspectRatio(CGSize(width: 3, height: 4), animated: false)
         } else {
-            videoCropView.setAspectRatio(CGSize(width: 2, height: 3), animated: false)
+            videoCropView.setAspectRatio(CGSize(width: 9, height: 19.5), animated: false)
         }
         
         if let asset = asset {
@@ -28,11 +29,6 @@ class VideoCropperViewController: UIViewController {
         }
     }
     
-    @IBAction func rotate(_ sender: Any) {
-        let newRatio = videoCropView.aspectRatio.width < videoCropView.aspectRatio.height ? CGSize(width: 3, height: 2) : CGSize(width: 2, height: 3)
-        videoCropView.setAspectRatio(newRatio, animated: true)
-    }
-
     func showError(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default)
@@ -50,11 +46,13 @@ class VideoCropperViewController: UIViewController {
     }
     
     @IBAction func done(_ sender: Any) {
+        onLoading?(true)
         try? prepareAssetComposition()
     }
 
     func prepareAssetComposition() throws {
         guard let asset = videoCropView.asset, let videoTrack = asset.tracks(withMediaType: AVMediaType.video).first else {
+            onLoading?(false)
             return
         }
 
@@ -62,6 +60,7 @@ class VideoCropperViewController: UIViewController {
         let trackTimeRange = CMTimeRangeMake(start: trimStartTime, duration: trimEndTime)
 
         guard let videoCompositionTrack = assetComposition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid) else {
+            onLoading?(false)
             return
         }
 
@@ -109,15 +108,17 @@ class VideoCropperViewController: UIViewController {
                     if let image = image {
                         let selectedImage = UIImage(cgImage: image, scale: UIScreen.main.scale, orientation: .up)
                         let croppedImage = selectedImage.crop(in: self.videoCropView.getImageCropFrame())!
-                        self.onComplete?(AVAsset(url: url), croppedImage)
+                        
+                        let scaledImage = croppedImage.scalePreservingAspectRatio(targetSize: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
 
-                        //UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil)
+                        self.onLoading?(false)
+                        self.onComplete?(AVAsset(url: url), scaledImage)
                     } else {
+                        self.onLoading?(false)
                         self.showError(message: "Failed to extract last frame of the video")
                     }
-                    
-                    //UISaveVideoAtPathToSavedPhotosAlbum(url.path, nil, nil, nil)
                 } else {
+                    self.onLoading?(false)
                     let error = exportSession?.error
                     self.showError(message: "Error exporting video: \(String(describing: error))")
                 }
@@ -171,6 +172,31 @@ extension UIImage {
         }
         return nil
     }
+    
+    func scalePreservingAspectRatio(targetSize: CGSize) -> UIImage {
+        let widthRatio = targetSize.width / size.width
+        let heightRatio = targetSize.height / size.height
+           
+        let scaleFactor = min(widthRatio, heightRatio)
+           
+        let scaledImageSize = CGSize(
+            width: size.width * scaleFactor,
+            height: size.height * scaleFactor
+        )
+
+        let renderer = UIGraphicsImageRenderer(
+            size: scaledImageSize
+        )
+
+        let scaledImage = renderer.image { _ in
+            self.draw(in: CGRect(
+                origin: .zero,
+                size: scaledImageSize
+            ))
+        }
+           
+        return scaledImage
+    }
 }
 
 struct VideoCropperViewControllerRepresentable: UIViewControllerRepresentable {
@@ -178,6 +204,7 @@ struct VideoCropperViewControllerRepresentable: UIViewControllerRepresentable {
     var trimStartTime: CMTime
     var trimEndTime: CMTime
     var onComplete: ((AVAsset, UIImage) -> Void)?
+    var onLoading: ((Bool) -> Void)?
     
     func makeUIViewController(context: Context) -> VideoCropperViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -186,6 +213,7 @@ struct VideoCropperViewControllerRepresentable: UIViewControllerRepresentable {
         }
         
         viewController.onComplete = onComplete
+        viewController.onLoading = onLoading
         viewController.trimStartTime = trimStartTime
         viewController.trimEndTime = trimEndTime
         viewController.asset = asset

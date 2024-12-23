@@ -105,15 +105,6 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P1n-Pq-Gqp">
                                         <rect key="frame" x="0.0" y="257" width="375" height="44"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KGQ-Qr-vw6">
-                                                <rect key="frame" x="76" y="7" width="45" height="30"/>
-                                                <state key="normal" title="Rotate">
-                                                    <color key="titleColor" systemColor="darkTextColor"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="rotate:" destination="S11-TT-8A3" eventType="touchUpInside" id="jxq-Lr-ubL"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yS8-Kv-A5S">
                                                 <rect key="frame" x="272" y="7" width="37" height="30"/>
                                                 <state key="normal" title="Done">
@@ -125,10 +116,8 @@
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="KGQ-Qr-vw6" firstAttribute="leading" secondItem="P1n-Pq-Gqp" secondAttribute="leading" constant="76" id="19r-uX-SKD"/>
                                             <constraint firstAttribute="height" constant="44" id="Mfp-Gu-Xo6"/>
                                             <constraint firstItem="yS8-Kv-A5S" firstAttribute="centerY" secondItem="P1n-Pq-Gqp" secondAttribute="centerY" id="Oae-wy-fJ1"/>
-                                            <constraint firstItem="KGQ-Qr-vw6" firstAttribute="centerY" secondItem="P1n-Pq-Gqp" secondAttribute="centerY" id="SmB-Er-ZcH"/>
                                             <constraint firstAttribute="trailing" secondItem="yS8-Kv-A5S" secondAttribute="trailing" constant="66" id="xY5-de-kfS"/>
                                         </constraints>
                                     </view>
@@ -165,9 +154,6 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="darkTextColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemPurpleColor">
             <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

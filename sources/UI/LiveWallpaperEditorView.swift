@@ -18,6 +18,7 @@ struct LiveWallpaperEditorView: View {
     @State private var videoLoaded: Bool = false
     @State private var videoCropped: Bool = false
     @State private var videoTrimmed: Bool = false
+    @State private var isCropping: Bool = false
     
     @State private var trimStartTime: CMTime = CMTime()
     @State private var trimEndTime: CMTime = CMTime()
@@ -36,7 +37,7 @@ struct LiveWallpaperEditorView: View {
     
     var body: some View {
         VStack {
-            if !videoLoaded || (videoLoaded && videoCropped && videoTrimmed) {
+            if !videoLoaded || isCropping || (videoLoaded && videoCropped && videoTrimmed) {
                 Spacer()
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: .purple))
@@ -62,6 +63,9 @@ struct LiveWallpaperEditorView: View {
                     onComplete: { (asset, image) in
                         videoCropped = true
                         self.setWallpaper(videoAsset: asset, image: image)
+                    },
+                    onLoading: { (state) in
+                        self.isCropping = state
                     }
                 )
             }
