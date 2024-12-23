@@ -15,6 +15,13 @@ struct LiveWallpaperEditorView: View {
     
     @State private var activeAlert: SheetAlert?
     
+    @State private var videoLoaded: Bool = false
+    @State private var videoCropped: Bool = false
+    @State private var videoTrimmed: Bool = false
+    
+    @State private var trimStartTime: CMTime = CMTime()
+    @State private var trimEndTime: CMTime = CMTime()
+    
     @State private var ignoreFileSizeCheck: Bool = false
     
     struct SheetAlert: Identifiable {
@@ -29,10 +36,35 @@ struct LiveWallpaperEditorView: View {
     
     var body: some View {
         VStack {
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint: .purple))
-                .scaleEffect(2.0, anchor: .center)
-                .padding(25)
+            if !videoLoaded || (videoLoaded && videoCropped && videoTrimmed) {
+                Spacer()
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .purple))
+                    .scaleEffect(2.0, anchor: .center)
+                    .padding(25)
+                Spacer()
+            }
+            else if !videoTrimmed {
+                VideoTrimmerViewControllerRepresentable(
+                    asset: player.currentItem?.asset,
+                    onComplete: { (startTime, endTime) in
+                        trimStartTime = startTime
+                        trimEndTime = endTime
+                        videoTrimmed = true
+                    }
+                )
+            }
+            else if !videoCropped {
+                VideoCropperViewControllerRepresentable(
+                    asset: player.currentItem?.asset,
+                    trimStartTime: trimStartTime,
+                    trimEndTime: trimEndTime,
+                    onComplete: { (asset, image) in
+                        videoCropped = true
+                        self.setWallpaper(videoAsset: asset, image: image)
+                    }
+                )
+            }
         }
         .onAppear {
             if let liveWallpaper = liveWallpaper {
@@ -55,17 +87,15 @@ struct LiveWallpaperEditorView: View {
                 return Alert(
                     title: Text(alert.title),
                     message: Text(alert.message),
-                    dismissButton: .default(Text("OK"))
+                    dismissButton: .default(Text("OK")) {
+                        if let primaryAction = alert.primaryAction {
+                            primaryAction()
+                        }
+                    }
                 )
             }
         }
-        .sheet(isPresented: $sheetManager.cropGuide, content: {
-            CropGuideView(sheetManager: sheetManager)
-        })
-        .padding()
         .preferredColorScheme(.light)
-        .background(.white)
-        .cornerRadius(.infinity)
     }
     
     private func loadVideo(_ item: PhotosPickerItem) {
@@ -74,8 +104,23 @@ struct LiveWallpaperEditorView: View {
                 if let url = try await item.loadTransferable(type: VideoTransferable.self) {
                     let playerItem = AVPlayerItem(url: url.url)
                     player.replaceCurrentItem(with: playerItem)
+                
+                    let videoAsset = player.currentItem!.asset
+                    let durationSeconds = CMTimeGetSeconds(videoAsset.duration)
+
+                    if durationSeconds < 5.0 {
+                        self.activeAlert = SheetAlert(
+                            title: "Error",
+                            message: "Video file must be at least 5 seconds long.",
+                            primaryAction: { sheetManager.closeAll() },
+                            secondaryAction: nil,
+                            primaryText: nil,
+                            secondaryText: nil
+                        )
+                        return
+                    }
                     
-                    self.setWallpaper()
+                    self.videoLoaded = true
                 }
             } catch {
                 print("Video loading error: \(error)")
@@ -83,10 +128,7 @@ struct LiveWallpaperEditorView: View {
         }
     }
     
-    private func setWallpaper() {
-        let videoAsset = player.currentItem!.asset
-        
-        let durationSeconds = CMTimeGetSeconds(videoAsset.duration)
+    private func setWallpaper(videoAsset: AVAsset, image: UIImage) {
         let targetDuration: Double = 5.0
         let tolerance: Double = 0.09
 
@@ -99,44 +141,26 @@ struct LiveWallpaperEditorView: View {
         
         let videoAspectRatio = videoSize.width / videoSize.height
         let screenAspectRatio = screenWidth / screenHeight
-        
-        if abs(durationSeconds - targetDuration) > tolerance {
-            sheetManager.cropGuide = true
-            return
-        }
-        
-        let fileSize = self.assetFileSize(player: player)
+                
+        let fileSize = self.assetFileSize(asset: videoAsset)
         if !ignoreFileSizeCheck && fileSize >= 7 {
             let formattedFileSize = String(format: "%.2f", fileSize)
             activeAlert = SheetAlert(
                 title: "Warning",
                 message: "The selected video file size is \(formattedFileSize)MB. The recommended file size is below 7MB. If the wallpaper appears blank, you should compress the file. Continue anyway?",
-                primaryAction: { self.ignoreFileSizeCheck = true; self.setWallpaper() },
+                primaryAction: { self.ignoreFileSizeCheck = true; self.setWallpaper(videoAsset: videoAsset, image: image) },
                 secondaryAction: { sheetManager.closeAll() },
-                primaryText: "Continue anyway",
+                primaryText: "Continue",
                 secondaryText: "Cancel"
             )
             return
         }
         
-        if abs(videoAspectRatio - screenAspectRatio) > 0.01 {
-            activeAlert = SheetAlert(
-                title: "Warning",
-                message: "The selected video file must have \(screenWidth)x\(screenHeight) resolution.\nYou can continue anyway, but the end result might look wrong.\nYou can also check the video guide about fixing this issue using default Photos app.",
-                primaryAction: { self.patch(resizeHEIC: false) },
-                secondaryAction: { sheetManager.cropGuide = true },
-                primaryText: "Continue anyway",
-                secondaryText: "View guide"
-            )
-            return
-        }
-        
-        self.patch(resizeHEIC: true)
+        self.patch(videoAsset: videoAsset, image: image)
     }
     
-    private func assetFileSize(player: AVPlayer) -> Double {
-        guard let currentItem = player.currentItem,
-              let urlAsset = currentItem.asset as? AVURLAsset else {
+    private func assetFileSize(asset: AVAsset) -> Double {
+        guard let urlAsset = asset as? AVURLAsset else {
             print("Unable to get URL from asset.")
             return 0
         }
@@ -156,13 +180,9 @@ struct LiveWallpaperEditorView: View {
         return 0
     }
     
-    private func patch(resizeHEIC: Bool) {
-        let videoAsset = player.currentItem!.asset
-        
+    private func patch(videoAsset: AVAsset, image: UIImage) {
         let screenWidth = UIScreen.main.bounds.size.width * UIScreen.main.scale
         let screenHeight = UIScreen.main.bounds.size.height * UIScreen.main.scale
-    
-        let durationSeconds = CMTimeGetSeconds(videoAsset.duration)
     
         let exportSession = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)!
         exportSession.outputURL = URL(filePath: liveWallpaper!.wallpaper.path)
@@ -170,22 +190,7 @@ struct LiveWallpaperEditorView: View {
 
         let timeRange = CMTimeRange(start: .zero, duration: CMTime(seconds: 5, preferredTimescale: 600))
         exportSession.timeRange = timeRange
-        
-        let composition = AVMutableComposition()
-        guard let videoTrack = videoAsset.tracks(withMediaType: .video).first else { return }
 
-        if resizeHEIC {
-            let videoComposition = AVMutableVideoComposition(asset: videoAsset) { request in
-                let source = request.sourceImage.clampedToExtent()
-                
-                let targetSize = CGSize(width: screenWidth, height: screenHeight)
-                let transform = CGAffineTransform(scaleX: targetSize.width / source.extent.width, y: targetSize.height / source.extent.height)
-                
-                let resizedImage = source.transformed(by: transform)
-                request.finish(with: resizedImage, context: nil)
-            }
-        }
-        
         do {
             try FileManager.default.moveItem(atPath: liveWallpaper!.wallpaper.path, toPath: liveWallpaper!.wallpaper.path + ".backup." + UUID().uuidString)
         } catch {
@@ -204,141 +209,121 @@ struct LiveWallpaperEditorView: View {
         exportSession.exportAsynchronously {
             switch exportSession.status {
             case .completed:
-                let imageGenerator = AVAssetImageGenerator(asset: videoAsset)
-                imageGenerator.requestedTimeToleranceAfter = .zero
-                imageGenerator.requestedTimeToleranceBefore = .zero
-                
-                let lastFrameTime = CMTime(seconds: durationSeconds, preferredTimescale: 600)
-                
-                imageGenerator.generateCGImagesAsynchronously(forTimes: [NSValue(time: lastFrameTime)]) { _, image, _, result, _ in
-                    if result == .succeeded, let cgImage = image {
-                        let uiImage = UIImage(cgImage: cgImage)
-                        let targetSize = CGSize(width: screenWidth, height: screenHeight)
-                                
-                        if resizeHEIC {
-                            UIGraphicsBeginImageContextWithOptions(targetSize, false, 0.0)
-                            uiImage.draw(in: CGRect(origin: .zero, size: targetSize))
-                            let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-                            UIGraphicsEndImageContext()
+                if let heicData = image.heicData(compressionQuality: 1.0) {
+                    do {
+                        try FileManager.default.moveItem(atPath: liveWallpaper!.wallpaper.stillImagePath, toPath: liveWallpaper!.wallpaper.stillImagePath + ".backup." + UUID().uuidString)
+                        
+                        try heicData.write(to: URL(filePath: liveWallpaper!.wallpaper.stillImagePath))
+                        
+                        let adjusted = liveWallpaper!.wallpaper.wallpaperRootDirectory + "/input.segmentation/asset.resource/Adjusted.HEIC"
+                        let proxy = liveWallpaper!.wallpaper.wallpaperRootDirectory + "/input.segmentation/asset.resource/proxy.heic";
+                        
+                        if(FileManager.default.fileExists(atPath: adjusted)) {
+                            try FileManager.default.removeItem(atPath: adjusted);
                         }
-                
-                        if let heicData = uiImage.heicData(compressionQuality: 1.0) {
-                            do {
-                                try FileManager.default.moveItem(atPath: liveWallpaper!.wallpaper.stillImagePath, toPath: liveWallpaper!.wallpaper.stillImagePath + ".backup." + UUID().uuidString)
-                                                            
-                                try heicData.write(to: URL(filePath: liveWallpaper!.wallpaper.stillImagePath))
-                                
-                                let adjusted = liveWallpaper!.wallpaper.wallpaperRootDirectory + "/input.segmentation/asset.resource/Adjusted.HEIC"
-                                let proxy = liveWallpaper!.wallpaper.wallpaperRootDirectory + "/input.segmentation/asset.resource/proxy.heic";
-                                
-                                if(FileManager.default.fileExists(atPath: adjusted)) {
-                                    try FileManager.default.removeItem(atPath: adjusted);
-                                }
-                                
-                                if(FileManager.default.fileExists(atPath: proxy)) {
-                                    try FileManager.default.removeItem(atPath: proxy);
-                                }
-                                                            
-                                if(!FileManager.default.fileExists(atPath: liveWallpaper!.wallpaper.contentsPath)) {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                        activeAlert = SheetAlert(
-                                            title: "Error",
-                                            message: "Contents.json file does not exist.",
-                                            primaryAction: nil,
-                                            secondaryAction: nil,
-                                            primaryText: nil,
-                                            secondaryText: nil
-                                        )
-                                    }
-                                    return
-                                }
-                                
-                                do {
-                                    let url = URL(filePath: liveWallpaper!.wallpaper.contentsPath)
-                                    let data = try Data(contentsOf: url)
-                                    let decoder = JSONDecoder()
-                                    var contents = try decoder.decode(Contents.self, from: data)
-                                    
-                                    let deviceResolution = contents.properties.portraitLayout.deviceResolution
-                                    
-                                    contents.layers[0].frame.Width = deviceResolution.Width
-                                    contents.layers[0].frame.Height = deviceResolution.Height
-                                    contents.layers[0].frame.Y = 0
-                                    contents.layers[0].frame.X = 0
-                                    contents.layers[0].zPosition = 5
-                                    contents.layers[0].identifier = "background"
-                                    contents.layers[0].filename = "portrait-layer_background.HEIC"
-                                    
-                                    contents.layers[1].frame.Width = deviceResolution.Width
-                                    contents.layers[1].frame.Height = deviceResolution.Height
-                                    contents.layers[1].frame.Y = 0
-                                    contents.layers[1].frame.X = 0
-                                    contents.layers[1].zPosition = 6
-                                    contents.layers[1].identifier = "settling-video"
-                                    contents.layers[1].filename = "portrait-layer_settling-video.MOV"
-                                    
-                                    contents.properties.portraitLayout.visibleFrame.Width = deviceResolution.Width
-                                    contents.properties.portraitLayout.visibleFrame.Height = deviceResolution.Height
-                                    contents.properties.portraitLayout.visibleFrame.X = 0
-                                    contents.properties.portraitLayout.visibleFrame.Y = 0
-                                    
-                                    contents.properties.portraitLayout.imageSize.Width = deviceResolution.Width
-                                    contents.properties.portraitLayout.imageSize.Height = deviceResolution.Height
-                                    
-                                    contents.properties.portraitLayout.inactiveFrame.Width = deviceResolution.Width
-                                    contents.properties.portraitLayout.inactiveFrame.Height = deviceResolution.Height
-                                    contents.properties.portraitLayout.inactiveFrame.X = 0
-                                    contents.properties.portraitLayout.inactiveFrame.Y = 0
-                                    
-                                    contents.properties.portraitLayout.parallaxPadding.Width = 0
-                                    contents.properties.portraitLayout.parallaxPadding.Height = 0
-                                    
-                                    contents.properties.settlingEffectEnabled = true
-                                    contents.properties.depthEnabled = false
-                                    contents.properties.parallaxDisabled = false
-                                    
-                                    let encoder = JSONEncoder()
-                                    encoder.outputFormatting = .prettyPrinted
-                                    
-                                    let encodedData = try encoder.encode(contents)
-                                    try encodedData.write(to: url)
-                                    
-                                    //
-                                    
-                                    let wallpaper = Wallpaper()
-                                    wallpaper.deleteSnapshots(liveWallpaper!.wallpaper.wallpaperVersionDirectory)
-
-                                    sheetManager.closeAll()
-                                    wallpaper.restartPosterBoard()
-                                    wallpaper.respring()
-                                } catch {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                        activeAlert = SheetAlert(
-                                            title: "Error",
-                                            message: "Failed to patch Contents.json: \(error)",
-                                            primaryAction: nil,
-                                            secondaryAction: nil,
-                                            primaryText: nil,
-                                            secondaryText: nil
-                                        )
-                                    }
-                                }
-                            } catch {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                    activeAlert = SheetAlert(
-                                        title: "Error",
-                                        message: "Failed to export HEIC image: \(error.localizedDescription)",
-                                        primaryAction: nil,
-                                        secondaryAction: nil,
-                                        primaryText: nil,
-                                        secondaryText: nil
-                                    )
-                                }
+                        
+                        if(FileManager.default.fileExists(atPath: proxy)) {
+                            try FileManager.default.removeItem(atPath: proxy);
+                        }
+                        
+                        if(!FileManager.default.fileExists(atPath: liveWallpaper!.wallpaper.contentsPath)) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                activeAlert = SheetAlert(
+                                    title: "Error",
+                                    message: "Contents.json file does not exist.",
+                                    primaryAction: nil,
+                                    secondaryAction: nil,
+                                    primaryText: nil,
+                                    secondaryText: nil
+                                )
+                            }
+                            return
+                        }
+                        
+                        do {
+                            let url = URL(filePath: liveWallpaper!.wallpaper.contentsPath)
+                            let data = try Data(contentsOf: url)
+                            let decoder = JSONDecoder()
+                            var contents = try decoder.decode(Contents.self, from: data)
+                            
+                            let deviceResolution = contents.properties.portraitLayout.deviceResolution
+                            
+                            contents.layers[0].frame.Width = deviceResolution.Width
+                            contents.layers[0].frame.Height = deviceResolution.Height
+                            contents.layers[0].frame.Y = 0
+                            contents.layers[0].frame.X = 0
+                            contents.layers[0].zPosition = 5
+                            contents.layers[0].identifier = "background"
+                            contents.layers[0].filename = "portrait-layer_background.HEIC"
+                            
+                            contents.layers[1].frame.Width = deviceResolution.Width
+                            contents.layers[1].frame.Height = deviceResolution.Height
+                            contents.layers[1].frame.Y = 0
+                            contents.layers[1].frame.X = 0
+                            contents.layers[1].zPosition = 6
+                            contents.layers[1].identifier = "settling-video"
+                            contents.layers[1].filename = "portrait-layer_settling-video.MOV"
+                            
+                            contents.properties.portraitLayout.visibleFrame.Width = deviceResolution.Width
+                            contents.properties.portraitLayout.visibleFrame.Height = deviceResolution.Height
+                            contents.properties.portraitLayout.visibleFrame.X = 0
+                            contents.properties.portraitLayout.visibleFrame.Y = 0
+                            
+                            contents.properties.portraitLayout.imageSize.Width = deviceResolution.Width
+                            contents.properties.portraitLayout.imageSize.Height = deviceResolution.Height
+                            
+                            contents.properties.portraitLayout.inactiveFrame.Width = deviceResolution.Width
+                            contents.properties.portraitLayout.inactiveFrame.Height = deviceResolution.Height
+                            contents.properties.portraitLayout.inactiveFrame.X = 0
+                            contents.properties.portraitLayout.inactiveFrame.Y = 0
+                            
+                            contents.properties.portraitLayout.parallaxPadding.Width = 0
+                            contents.properties.portraitLayout.parallaxPadding.Height = 0
+                            
+                            contents.properties.settlingEffectEnabled = true
+                            contents.properties.depthEnabled = false
+                            contents.properties.parallaxDisabled = false
+                            
+                            let encoder = JSONEncoder()
+                            encoder.outputFormatting = .prettyPrinted
+                            
+                            let encodedData = try encoder.encode(contents)
+                            try encodedData.write(to: url)
+                            
+                            //
+                            
+                            let wallpaper = Wallpaper()
+                            wallpaper.deleteSnapshots(liveWallpaper!.wallpaper.wallpaperVersionDirectory)
+                            
+                            sheetManager.closeAll()
+                            wallpaper.restartPosterBoard()
+                            wallpaper.respring()
+                        } catch {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                activeAlert = SheetAlert(
+                                    title: "Error",
+                                    message: "Failed to patch Contents.json: \(error)",
+                                    primaryAction: nil,
+                                    secondaryAction: nil,
+                                    primaryText: nil,
+                                    secondaryText: nil
+                                )
                             }
                         }
+                    } catch {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            activeAlert = SheetAlert(
+                                title: "Error",
+                                message: "Failed to export HEIC image: \(error.localizedDescription)",
+                                primaryAction: nil,
+                                secondaryAction: nil,
+                                primaryText: nil,
+                                secondaryText: nil
+                            )
+                        }
                     }
+                    break
                 }
-                break
             default:
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     activeAlert = SheetAlert(

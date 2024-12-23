@@ -10,11 +10,15 @@
 		C10649702D17EB7C00D2AC84 /* ConditionalNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C106496F2D17EB7C00D2AC84 /* ConditionalNavigationView.swift */; };
 		C1301E972CC296F500EC6C20 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1301E962CC296F500EC6C20 /* SheetManager.swift */; };
 		C1301E992CC29C6400EC6C20 /* WallpaperContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1301E982CC29C6400EC6C20 /* WallpaperContents.swift */; };
-		C13691E12CC3DCCD00C6967C /* CropGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13691E02CC3DCCD00C6967C /* CropGuideView.swift */; };
 		C13796852CC17FAF009AA80B /* LiveWallpaperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13796842CC17FAF009AA80B /* LiveWallpaperView.swift */; };
 		C13796872CC18D76009AA80B /* LiveWallpaperEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13796862CC18D76009AA80B /* LiveWallpaperEditorView.swift */; };
 		C137968B2CC19EEE009AA80B /* WallpaperSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C137968A2CC19EEE009AA80B /* WallpaperSelection.swift */; };
 		C14492BB2CC1600A006B0EC5 /* WallpaperSelectorModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14492BA2CC1600A006B0EC5 /* WallpaperSelectorModal.swift */; };
+		C191F6B52D195AFA00855FBB /* PryntTrimmerView in Frameworks */ = {isa = PBXBuildFile; productRef = C191F6B42D195AFA00855FBB /* PryntTrimmerView */; };
+		C191F6B82D195B4200855FBB /* AVPlayer+isPlaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = C191F6B72D195B4200855FBB /* AVPlayer+isPlaying.swift */; };
+		C191F6BC2D195C7C00855FBB /* VideoCropperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C191F6BB2D195C7C00855FBB /* VideoCropperViewController.swift */; };
+		C191F6BE2D195C8900855FBB /* VideoTrimmerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C191F6BD2D195C8900855FBB /* VideoTrimmerViewController.swift */; };
+		C191F6C22D19637A00855FBB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C191F6C12D19637A00855FBB /* Main.storyboard */; };
 		C1CFC8802CC069BE007F0CF9 /* Daemon.m in Sources */ = {isa = PBXBuildFile; fileRef = C1CFC87F2CC069BE007F0CF9 /* Daemon.m */; };
 		C1D0B90E2CC0336600F3F5E4 /* build.sh in Resources */ = {isa = PBXBuildFile; fileRef = C1D0B90D2CC0336600F3F5E4 /* build.sh */; };
 		C1D0B9132CC0371100F3F5E4 /* Wallpaper.m in Sources */ = {isa = PBXBuildFile; fileRef = C1D0B9122CC0371100F3F5E4 /* Wallpaper.m */; };
@@ -44,11 +48,14 @@
 		C106496F2D17EB7C00D2AC84 /* ConditionalNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalNavigationView.swift; sourceTree = "<group>"; };
 		C1301E962CC296F500EC6C20 /* SheetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
 		C1301E982CC29C6400EC6C20 /* WallpaperContents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperContents.swift; sourceTree = "<group>"; };
-		C13691E02CC3DCCD00C6967C /* CropGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropGuideView.swift; sourceTree = "<group>"; };
 		C13796842CC17FAF009AA80B /* LiveWallpaperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWallpaperView.swift; sourceTree = "<group>"; };
 		C13796862CC18D76009AA80B /* LiveWallpaperEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWallpaperEditorView.swift; sourceTree = "<group>"; };
 		C137968A2CC19EEE009AA80B /* WallpaperSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSelection.swift; sourceTree = "<group>"; };
 		C14492BA2CC1600A006B0EC5 /* WallpaperSelectorModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSelectorModal.swift; sourceTree = "<group>"; };
+		C191F6B72D195B4200855FBB /* AVPlayer+isPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVPlayer+isPlaying.swift"; sourceTree = "<group>"; };
+		C191F6BB2D195C7C00855FBB /* VideoCropperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCropperViewController.swift; sourceTree = "<group>"; };
+		C191F6BD2D195C8900855FBB /* VideoTrimmerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTrimmerViewController.swift; sourceTree = "<group>"; };
+		C191F6C12D19637A00855FBB /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		C1CFC87E2CC069AA007F0CF9 /* Daemon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Daemon.h; sourceTree = "<group>"; };
 		C1CFC87F2CC069BE007F0CF9 /* Daemon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Daemon.m; sourceTree = "<group>"; };
 		C1CFC8822CC07C5E007F0CF9 /* NSUserDefaults+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+Private.h"; sourceTree = "<group>"; };
@@ -115,6 +122,7 @@
 				CC711D9E2B5C0081007235A6 /* AssertionServices.tbd in Frameworks */,
 				CC8DDA9A2B6631DC001C7C9E /* AppIntents.framework in Frameworks */,
 				CC711D9A2B5BFF2F007235A6 /* BackBoardServices.tbd in Frameworks */,
+				C191F6B52D195AFA00855FBB /* PryntTrimmerView in Frameworks */,
 				CC711D982B5BFF2F007235A6 /* GraphicsServices.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,6 +130,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C191F6B62D195B2800855FBB /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				C191F6B72D195B4200855FBB /* AVPlayer+isPlaying.swift */,
+				C191F6BB2D195C7C00855FBB /* VideoCropperViewController.swift */,
+				C191F6BD2D195C8900855FBB /* VideoTrimmerViewController.swift */,
+				C191F6C12D19637A00855FBB /* Main.storyboard */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
 		C1D0B9102CC036D300F3F5E4 /* Wallpaper */ = {
 			isa = PBXGroup;
 			children = (
@@ -160,13 +179,13 @@
 		C1D0B9192CC054F800F3F5E4 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				C191F6B62D195B2800855FBB /* Editor */,
 				C1D0B91A2CC0558E00F3F5E4 /* BlossomView.swift */,
 				C1D0B91C2CC0567100F3F5E4 /* BlossomViewController.swift */,
 				C14492BA2CC1600A006B0EC5 /* WallpaperSelectorModal.swift */,
 				C13796842CC17FAF009AA80B /* LiveWallpaperView.swift */,
 				C13796862CC18D76009AA80B /* LiveWallpaperEditorView.swift */,
 				C1301E962CC296F500EC6C20 /* SheetManager.swift */,
-				C13691E02CC3DCCD00C6967C /* CropGuideView.swift */,
 				C106496F2D17EB7C00D2AC84 /* ConditionalNavigationView.swift */,
 			);
 			path = UI;
@@ -280,6 +299,7 @@
 			);
 			name = Blossom;
 			packageProductDependencies = (
+				C191F6B42D195AFA00855FBB /* PryntTrimmerView */,
 			);
 			productName = TrollSpeed;
 			productReference = CC711D012B5BF550007235A6 /* Blossom.app */;
@@ -309,6 +329,7 @@
 			);
 			mainGroup = CC711CF82B5BF550007235A6;
 			packageReferences = (
+				C191F6B32D195AFA00855FBB /* XCRemoteSwiftPackageReference "PryntTrimmerView" */,
 			);
 			productRefGroup = CC711D022B5BF550007235A6 /* Products */;
 			projectDirPath = "";
@@ -327,6 +348,7 @@
 				C1D0B9172CC051CA00F3F5E4 /* icon.png in Resources */,
 				C1D0B9152CC0471B00F3F5E4 /* README.md in Resources */,
 				C1D0B90E2CC0336600F3F5E4 /* build.sh in Resources */,
+				C191F6C22D19637A00855FBB /* Main.storyboard in Resources */,
 				CC711D112B5BF551007235A6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -340,11 +362,11 @@
 			files = (
 				C14492BB2CC1600A006B0EC5 /* WallpaperSelectorModal.swift in Sources */,
 				CC711D4A2B5BF5C6007235A6 /* HUDHelper.mm in Sources */,
-				C13691E12CC3DCCD00C6967C /* CropGuideView.swift in Sources */,
 				CC9130A32B616C18006E3280 /* HUDBackdropView.mm in Sources */,
 				C1D0B91B2CC0558E00F3F5E4 /* BlossomView.swift in Sources */,
 				C1CFC8802CC069BE007F0CF9 /* Daemon.m in Sources */,
 				C13796852CC17FAF009AA80B /* LiveWallpaperView.swift in Sources */,
+				C191F6B82D195B4200855FBB /* AVPlayer+isPlaying.swift in Sources */,
 				CC711D612B5BF5C6007235A6 /* HUDMainApplication.mm in Sources */,
 				CC711D5F2B5BF5C6007235A6 /* MainApplication.mm in Sources */,
 				C1301E992CC29C6400EC6C20 /* WallpaperContents.swift in Sources */,
@@ -359,6 +381,8 @@
 				C1D0B91D2CC0567100F3F5E4 /* BlossomViewController.swift in Sources */,
 				C13796872CC18D76009AA80B /* LiveWallpaperEditorView.swift in Sources */,
 				CC711D4C2B5BF5C6007235A6 /* HUDMainWindow.mm in Sources */,
+				C191F6BC2D195C7C00855FBB /* VideoCropperViewController.swift in Sources */,
+				C191F6BE2D195C8900855FBB /* VideoTrimmerViewController.swift in Sources */,
 				C137968B2CC19EEE009AA80B /* WallpaperSelection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -612,6 +636,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C191F6B32D195AFA00855FBB /* XCRemoteSwiftPackageReference "PryntTrimmerView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/HHK1/PryntTrimmerView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C191F6B42D195AFA00855FBB /* PryntTrimmerView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C191F6B32D195AFA00855FBB /* XCRemoteSwiftPackageReference "PryntTrimmerView" */;
+			productName = PryntTrimmerView;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CC711CF92B5BF550007235A6 /* Project object */;
 }

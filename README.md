@@ -20,15 +20,11 @@ Live wallpapers can be looped by repeatedly crashing the `PhotosPosterProvider` 
 
 Download the **.tipa** file from [Releases](https://github.com/inyourwalls/Blossom/releases) page and install it in TrollStore.
 
-1. Crop your video to your phone screen resolution beforehand, and trim it to exactly 5 seconds. See the video guide below:
-
-https://github.com/user-attachments/assets/361c9bbe-9788-44d6-b501-de690fff9144
-
-2. Create a Live Photo wallpaper in iOS. Make sure to configure widgets, clock style, etc., now, as you **cannot** edit the wallpaper afterwards.
+1. Create a Live Photo wallpaper in iOS. Make sure to configure widgets, clock style, etc., now, as you **cannot** edit the wallpaper afterwards.
 
 **Note:** If you encounter issues with setting a Live Photo as a wallpaper through camera roll or Photos app, you can use [apps like this one](https://apps.apple.com/de/app/video-to-live-photos-maker/id1596786737) to do so, because it's a bit bugged in iOS 17.0.
 
-3. Open Blossom and click "Set Wallpaper", select your recently created wallpaper and any custom video.
+2. Open Blossom and click "Set Wallpaper", select your recently created wallpaper and any custom video.
 
 ## FAQ
 

@@ -8,9 +8,6 @@ struct BlossomView: View {
     @State private var isInitialized: Bool = false
     @State private var interactionAllowed: Bool = false
     
-    @State private var showAlert = false
-    @State private var alertMessage = ""
-    
     @State private var aboutAlert = false
     
     @ObservedObject var sheetManager: SheetManager = SheetManager()
@@ -106,11 +103,6 @@ struct BlossomView: View {
             .onChange(of: isLoopEnabled) { newValue in
                 if isInitialized {
                     daemon.toggle()
-                    
-                    if newValue {
-                        showAlert = true
-                        alertMessage = "While this option is active, you are not able to create new wallpapers in iOS.\nDisable this to make a new wallpaper."
-                    }
                 }
             }
             .onAppear {
@@ -125,13 +117,6 @@ struct BlossomView: View {
                     self.interactionAllowed = true
                 }
             }
-        }
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text("Blossom"),
-                message: Text(alertMessage),
-                dismissButton: .default(Text("OK"))
-            )
         }
         .alert(isPresented: $aboutAlert) {
             Alert(
@@ -148,11 +133,6 @@ struct BlossomView: View {
         .sheet(isPresented: $sheetManager.wallpaperSelector, content: {
             WallpaperSelectorModal(sheetManager: sheetManager)
         })
-        .onChange(of: sheetManager.cropGuide) { newValue in
-            if !sheetManager.cropGuide {
-                sheetManager.closeAll()
-            }
-        }
         .preferredColorScheme(.light)
     }
 }
