@@ -66,18 +66,14 @@ class VideoCropperViewController: UIViewController {
 
         try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
 
-        if let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first {
-            let audioCompositionTrack = assetComposition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
-            try audioCompositionTrack?.insertTimeRange(trackTimeRange, of: audioTrack, at: CMTime.zero)
-        }
-
         let mainInstructions = AVMutableVideoCompositionInstruction()
         mainInstructions.timeRange = CMTimeRangeMake(start: .zero, duration: asset.duration)
 
         let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
 
-        let renderSize = CGSize(width: 16 * videoCropView.aspectRatio.width * 18,
+        var renderSize = CGSize(width: 16 * videoCropView.aspectRatio.width * 18,
                                 height: 16 * videoCropView.aspectRatio.height * 18)
+        
         let transform = getTransform(for: videoTrack)
 
         layerInstructions.setTransform(transform, at: CMTime.zero)
@@ -104,7 +100,7 @@ class VideoCropperViewController: UIViewController {
                     generator.requestedTimeToleranceBefore = CMTime.zero
                     generator.requestedTimeToleranceAfter = CMTime.zero
                     generator.appliesPreferredTrackTransform = true
-                    let image = try? generator.copyCGImage(at: asset.duration, actualTime: nil)
+                    let image = try? generator.copyCGImage(at: self.trimEndTime, actualTime: nil)
                     if let image = image {
                         let selectedImage = UIImage(cgImage: image, scale: UIScreen.main.scale, orientation: .up)
                         let croppedImage = selectedImage.crop(in: self.videoCropView.getImageCropFrame())!
