@@ -151,7 +151,7 @@ struct LiveWallpaperEditorView: View {
             let formattedFileSize = String(format: "%.2f", fileSize)
             activeAlert = SheetAlert(
                 title: "Warning",
-                message: "The selected video file size is \(formattedFileSize)MB. The recommended file size is below 7MB. If the wallpaper appears blank, you should compress the file. Continue anyway?",
+                message: "The selected video file size is \(formattedFileSize)MB. The recommended file size is ~7-15MB. You may continue, but if the wallpaper appears blank in result, you should compress the video file.\nContinue?",
                 primaryAction: { self.ignoreFileSizeCheck = true; self.setWallpaper(videoAsset: videoAsset, image: image) },
                 secondaryAction: { sheetManager.closeAll() },
                 primaryText: "Continue",
@@ -188,9 +188,10 @@ struct LiveWallpaperEditorView: View {
         let screenWidth = UIScreen.main.bounds.size.width * UIScreen.main.scale
         let screenHeight = UIScreen.main.bounds.size.height * UIScreen.main.scale
     
-        let exportSession = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)!
+        let exportSession = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHEVCHighestQuality)!
         exportSession.outputURL = URL(filePath: liveWallpaper!.wallpaper.path)
         exportSession.outputFileType = .mov
+        exportSession.shouldOptimizeForNetworkUse = true
 
         let timeRange = CMTimeRange(start: .zero, duration: CMTime(seconds: 5, preferredTimescale: 600))
         exportSession.timeRange = timeRange
