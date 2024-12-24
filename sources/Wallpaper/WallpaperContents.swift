@@ -25,6 +25,7 @@ struct Resolution: Codable {
 
 struct Properties: Codable {
     var portraitLayout: Layout
+    var landscapeLayout: Layout?
     
     var settlingEffectEnabled: Bool
     var depthEnabled: Bool

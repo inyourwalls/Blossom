@@ -53,17 +53,70 @@ static void LaunchServicesApplicationStateChanged
 
 - (void)registerNotifications
 {
+    
 #if !TARGET_IPHONE_SIMULATOR
     int token;
     notify_register_dispatch(NOTIFY_RELOAD_HUD, &token, dispatch_get_main_queue(), ^(int token) {
         
     });
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-        selector:@selector(screenBrightnessDidChange:)
-        name:UIScreenBrightnessDidChangeNotification
-        object:nil];
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+            selector:@selector(screenBrightnessDidChange:)
+            name:UIScreenBrightnessDidChangeNotification
+            object:nil];
+        
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+            selector:@selector(deviceOrientationDidChange:)
+            name:UIDeviceOrientationDidChangeNotification
+            object:nil];
+    }
 #endif
+}
+
+- (void)deviceOrientationDidChange:(NSNotification *)notification {
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    
+    NSString* contentsFilePath = [GetStandardUserDefaults() stringForKey:@"LatestWallpaperContentsFilePath"];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:contentsFilePath]) {
+        NSError *error = nil;
+        NSString *fileContents = [NSString stringWithContentsOfFile:contentsFilePath
+                                    encoding:NSUTF8StringEncoding
+                                    error:&error];
+            
+        if (error) {
+            NSLog(@"Failed to read file: %@", error.localizedDescription);
+            return;
+        }
+        
+        if (orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown) {
+            NSLog(@"Device is in Portrait orientation.");
+            
+            NSString *modifiedContents = [fileContents stringByReplacingOccurrencesOfString:@"landscape-layer_background.HEIC"
+                                            withString:@"portrait-layer_background.HEIC"];
+                    
+            [modifiedContents writeToFile:contentsFilePath
+                              atomically:YES
+                              encoding:NSUTF8StringEncoding
+                              error:&error];
+        } else if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+            NSLog(@"Device is in Landscape orientation.");
+            
+            NSString *modifiedContents = [fileContents stringByReplacingOccurrencesOfString:@"portrait-layer_background.HEIC"
+                                            withString:@"landscape-layer_background.HEIC"];
+                    
+            [modifiedContents writeToFile:contentsFilePath
+                              atomically:YES
+                              encoding:NSUTF8StringEncoding
+                              error:&error];
+        } else {
+            NSLog(@"Device orientation is unknown or flat.");
+        }
+    } else {
+        NSLog(@"Failed to find Contents.json file. Was wallpaper deleted?");
+    }
 }
 
 - (void)screenBrightnessDidChange:(NSNotification *)notification {

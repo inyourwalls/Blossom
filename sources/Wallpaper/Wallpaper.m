@@ -93,6 +93,7 @@
             wallpaper.wallpaperRootDirectory = [NSString stringWithFormat:@"%@/%@", contents, contentDirectory];
             wallpaper.path = liveWallpaperPath;
             wallpaper.stillImagePath = [NSString stringWithFormat:@"%@/portrait-layer_background.HEIC", wallpaperDirectory];
+            wallpaper.stillImagePathLandscape = [NSString stringWithFormat:@"%@/landscape-layer_background.HEIC", wallpaperDirectory];
             wallpaper.contentsPath = [NSString stringWithFormat:@"%@/Contents.json", wallpaperDirectory];
             wallpaper.wallpaperVersionDirectory = [NSString stringWithFormat:@"%@/%@", versions, version];
             

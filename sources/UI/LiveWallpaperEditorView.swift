@@ -7,6 +7,8 @@ import System
 
 struct LiveWallpaperEditorView: View {
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     @ObservedObject var sheetManager: SheetManager
     
     @State var liveWallpaper: WallpaperSelection? = nil
@@ -214,117 +216,164 @@ struct LiveWallpaperEditorView: View {
         exportSession.exportAsynchronously {
             switch exportSession.status {
             case .completed:
-                if let heicData = image.heicData(compressionQuality: 1.0) {
-                    do {
-                        try FileManager.default.moveItem(atPath: liveWallpaper!.wallpaper.stillImagePath, toPath: liveWallpaper!.wallpaper.stillImagePath + ".backup." + UUID().uuidString)
-                        
-                        try heicData.write(to: URL(filePath: liveWallpaper!.wallpaper.stillImagePath))
-                        
-                        let adjusted = liveWallpaper!.wallpaper.wallpaperRootDirectory + "/input.segmentation/asset.resource/Adjusted.HEIC"
-                        let proxy = liveWallpaper!.wallpaper.wallpaperRootDirectory + "/input.segmentation/asset.resource/proxy.heic";
-                        
-                        if(FileManager.default.fileExists(atPath: adjusted)) {
-                            try FileManager.default.removeItem(atPath: adjusted);
-                        }
-                        
-                        if(FileManager.default.fileExists(atPath: proxy)) {
-                            try FileManager.default.removeItem(atPath: proxy);
-                        }
-                        
-                        if(!FileManager.default.fileExists(atPath: liveWallpaper!.wallpaper.contentsPath)) {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                activeAlert = SheetAlert(
-                                    title: "Error",
-                                    message: "Contents.json file does not exist.",
-                                    primaryAction: nil,
-                                    secondaryAction: nil,
-                                    primaryText: nil,
-                                    secondaryText: nil
-                                )
-                            }
-                            return
-                        }
-                        
+                if let landscapeHeicImage = makeLandscapeImage(image: image)?.heicData(compressionQuality: 1.0) {
+                    if let heicData = image.heicData(compressionQuality: 1.0) {
                         do {
-                            let url = URL(filePath: liveWallpaper!.wallpaper.contentsPath)
-                            let data = try Data(contentsOf: url)
-                            let decoder = JSONDecoder()
-                            var contents = try decoder.decode(Contents.self, from: data)
+                            try FileManager.default.moveItem(atPath: liveWallpaper!.wallpaper.stillImagePath, toPath: liveWallpaper!.wallpaper.stillImagePath + ".backup." + UUID().uuidString)
                             
-                            let deviceResolution = contents.properties.portraitLayout.deviceResolution
+                            try heicData.write(to: URL(filePath: liveWallpaper!.wallpaper.stillImagePath))
+                           
+                            if FileManager.default.fileExists(atPath: liveWallpaper!.wallpaper.stillImagePathLandscape) {
+                                try FileManager.default.moveItem(atPath: liveWallpaper!.wallpaper.stillImagePathLandscape, toPath: liveWallpaper!.wallpaper.stillImagePathLandscape + ".backup." + UUID().uuidString)
+                            }
                             
-                            contents.layers[0].frame.Width = deviceResolution.Width
-                            contents.layers[0].frame.Height = deviceResolution.Height
-                            contents.layers[0].frame.Y = 0
-                            contents.layers[0].frame.X = 0
-                            contents.layers[0].zPosition = 5
-                            contents.layers[0].identifier = "background"
-                            contents.layers[0].filename = "portrait-layer_background.HEIC"
+                            try landscapeHeicImage.write(to: URL(filePath: liveWallpaper!.wallpaper.stillImagePathLandscape))
                             
-                            contents.layers[1].frame.Width = deviceResolution.Width
-                            contents.layers[1].frame.Height = deviceResolution.Height
-                            contents.layers[1].frame.Y = 0
-                            contents.layers[1].frame.X = 0
-                            contents.layers[1].zPosition = 6
-                            contents.layers[1].identifier = "settling-video"
-                            contents.layers[1].filename = "portrait-layer_settling-video.MOV"
+                            let adjusted = liveWallpaper!.wallpaper.wallpaperRootDirectory + "/input.segmentation/asset.resource/Adjusted.HEIC"
+                            let proxy = liveWallpaper!.wallpaper.wallpaperRootDirectory + "/input.segmentation/asset.resource/proxy.heic";
                             
-                            contents.properties.portraitLayout.visibleFrame.Width = deviceResolution.Width
-                            contents.properties.portraitLayout.visibleFrame.Height = deviceResolution.Height
-                            contents.properties.portraitLayout.visibleFrame.X = 0
-                            contents.properties.portraitLayout.visibleFrame.Y = 0
+                            if(FileManager.default.fileExists(atPath: adjusted)) {
+                                try FileManager.default.removeItem(atPath: adjusted);
+                            }
                             
-                            contents.properties.portraitLayout.imageSize.Width = deviceResolution.Width
-                            contents.properties.portraitLayout.imageSize.Height = deviceResolution.Height
+                            if(FileManager.default.fileExists(atPath: proxy)) {
+                                try FileManager.default.removeItem(atPath: proxy);
+                            }
                             
-                            contents.properties.portraitLayout.inactiveFrame.Width = deviceResolution.Width
-                            contents.properties.portraitLayout.inactiveFrame.Height = deviceResolution.Height
-                            contents.properties.portraitLayout.inactiveFrame.X = 0
-                            contents.properties.portraitLayout.inactiveFrame.Y = 0
+                            if(!FileManager.default.fileExists(atPath: liveWallpaper!.wallpaper.contentsPath)) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                    activeAlert = SheetAlert(
+                                        title: "Error",
+                                        message: "Contents.json file does not exist.",
+                                        primaryAction: nil,
+                                        secondaryAction: nil,
+                                        primaryText: nil,
+                                        secondaryText: nil
+                                    )
+                                }
+                                return
+                            }
                             
-                            contents.properties.portraitLayout.parallaxPadding.Width = 0
-                            contents.properties.portraitLayout.parallaxPadding.Height = 0
-                            
-                            contents.properties.settlingEffectEnabled = true
-                            contents.properties.depthEnabled = false
-                            contents.properties.parallaxDisabled = false
-                            
-                            let encoder = JSONEncoder()
-                            encoder.outputFormatting = .prettyPrinted
-                            
-                            let encodedData = try encoder.encode(contents)
-                            try encodedData.write(to: url)
-                            
-                            //
-                            
-                            let wallpaper = Wallpaper()
-                            wallpaper.deleteSnapshots(liveWallpaper!.wallpaper.wallpaperVersionDirectory)
-                            
-                            sheetManager.closeAll()
-                            wallpaper.restartPosterBoard()
-                            wallpaper.respring()
+                            do {
+                                let url = URL(filePath: liveWallpaper!.wallpaper.contentsPath)
+                                let data = try Data(contentsOf: url)
+                                let decoder = JSONDecoder()
+                                var contents = try decoder.decode(Contents.self, from: data)
+
+                                let deviceResolution = contents.properties.portraitLayout.deviceResolution
+                                
+                                contents.layers = [
+                                    Layer(
+                                        frame: Frame(
+                                            Width: deviceResolution.Width,
+                                            Height: deviceResolution.Height,
+                                            X: 0,
+                                            Y: 0
+                                        ),
+                                        filename: "portrait-layer_background.HEIC",
+                                        zPosition: 5,
+                                        identifier: "background"
+                                    ),
+                                    Layer(
+                                        frame: Frame(
+                                            Width: deviceResolution.Width,
+                                            Height: deviceResolution.Height,
+                                            X: 0,
+                                            Y: 0
+                                        ),
+                                        filename: "portrait-layer_settling-video.MOV",
+                                        zPosition: 6,
+                                        identifier: "settling-video"
+                                    )
+                                ]
+
+                                // iPad
+                                if horizontalSizeClass != .compact {
+                                    contents.properties.landscapeLayout?.visibleFrame.Width = deviceResolution.Height
+                                    contents.properties.landscapeLayout?.visibleFrame.Height = deviceResolution.Width
+                                    contents.properties.landscapeLayout?.visibleFrame.X = 0
+                                    contents.properties.landscapeLayout?.visibleFrame.Y = 0
+                                    
+                                    contents.properties.landscapeLayout?.imageSize.Width = deviceResolution.Height
+                                    contents.properties.landscapeLayout?.imageSize.Height = deviceResolution.Width
+                                    
+                                    contents.properties.landscapeLayout?.inactiveFrame.Width = deviceResolution.Height
+                                    contents.properties.landscapeLayout?.inactiveFrame.Height = deviceResolution.Width
+                                    contents.properties.landscapeLayout?.inactiveFrame.X = 0
+                                    contents.properties.landscapeLayout?.inactiveFrame.Y = 0
+                                    
+                                    contents.properties.landscapeLayout?.parallaxPadding.Width = 0
+                                    contents.properties.landscapeLayout?.parallaxPadding.Height = 0
+                                }
+                                
+                                contents.properties.portraitLayout.visibleFrame.Width = deviceResolution.Width
+                                contents.properties.portraitLayout.visibleFrame.Height = deviceResolution.Height
+                                contents.properties.portraitLayout.visibleFrame.X = 0
+                                contents.properties.portraitLayout.visibleFrame.Y = 0
+                                
+                                contents.properties.portraitLayout.imageSize.Width = deviceResolution.Width
+                                contents.properties.portraitLayout.imageSize.Height = deviceResolution.Height
+                                
+                                contents.properties.portraitLayout.inactiveFrame.Width = deviceResolution.Width
+                                contents.properties.portraitLayout.inactiveFrame.Height = deviceResolution.Height
+                                contents.properties.portraitLayout.inactiveFrame.X = 0
+                                contents.properties.portraitLayout.inactiveFrame.Y = 0
+                                
+                                contents.properties.portraitLayout.parallaxPadding.Width = 0
+                                contents.properties.portraitLayout.parallaxPadding.Height = 0
+                                
+                                contents.properties.settlingEffectEnabled = true
+                                contents.properties.depthEnabled = false
+                                contents.properties.parallaxDisabled = false
+                                
+                                let encoder = JSONEncoder()
+                                encoder.outputFormatting = .prettyPrinted
+                                
+                                let encodedData = try encoder.encode(contents)
+                                try encodedData.write(to: url)
+                                
+                                let wallpaper = Wallpaper()
+                                wallpaper.deleteSnapshots(liveWallpaper!.wallpaper.wallpaperVersionDirectory)
+                                
+                                UserDefaults.standard.set(liveWallpaper!.wallpaper.contentsPath, forKey: "LatestWallpaperContentsFilePath")
+                                                                
+                                sheetManager.closeAll()
+                                wallpaper.restartPosterBoard()
+                                wallpaper.respring()
+                            } catch {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                    activeAlert = SheetAlert(
+                                        title: "Error",
+                                        message: "Failed to patch Contents.json: \(error)",
+                                        primaryAction: nil,
+                                        secondaryAction: nil,
+                                        primaryText: nil,
+                                        secondaryText: nil
+                                    )
+                                }
+                            }
                         } catch {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                 activeAlert = SheetAlert(
                                     title: "Error",
-                                    message: "Failed to patch Contents.json: \(error)",
+                                    message: "Failed to export portrait HEIC image: \(error.localizedDescription)",
                                     primaryAction: nil,
                                     secondaryAction: nil,
                                     primaryText: nil,
                                     secondaryText: nil
                                 )
                             }
-                        }
-                    } catch {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                            activeAlert = SheetAlert(
-                                title: "Error",
-                                message: "Failed to export HEIC image: \(error.localizedDescription)",
-                                primaryAction: nil,
-                                secondaryAction: nil,
-                                primaryText: nil,
-                                secondaryText: nil
-                            )
+                        } catch {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                activeAlert = SheetAlert(
+                                    title: "Error",
+                                    message: "Failed to export landscape HEIC image: \(error.localizedDescription)",
+                                    primaryAction: nil,
+                                    secondaryAction: nil,
+                                    primaryText: nil,
+                                    secondaryText: nil
+                                )
+                            }
                         }
                     }
                     break
@@ -342,6 +391,31 @@ struct LiveWallpaperEditorView: View {
                 }
             }
         }
+    }
+    
+    private func makeLandscapeImage(image: UIImage) -> UIImage? {
+        let originalSize = image.size
+        
+        let landscapeSize = CGSize(width: originalSize.height, height: originalSize.width)
+        
+        UIGraphicsBeginImageContextWithOptions(landscapeSize, false, image.scale)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return nil
+        }
+        
+        context.translateBy(x: landscapeSize.width / 2, y: landscapeSize.height / 2)
+        context.rotate(by: .pi / 2)
+        
+        image.draw(in: CGRect(x: -originalSize.width / 2, y: -originalSize.height / 2,
+                              width: originalSize.width, height: originalSize.height))
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        
+        return newImage
     }
     
     private func loadVideoURL(_ item: PhotosPickerItem) async throws -> URL? {

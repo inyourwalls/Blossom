@@ -41,6 +41,7 @@
 @property (nonatomic, strong) NSString* wallpaperVersionDirectory;
 @property (nonatomic, strong) NSString* path;
 @property (nonatomic, strong) NSString* stillImagePath;
+@property (nonatomic, strong) NSString* stillImagePathLandscape;
 @property (nonatomic, strong) NSString* contentsPath;
 
 @end

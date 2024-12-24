@@ -161,7 +161,7 @@ NSUserDefaults *GetStandardUserDefaults(void)
         NSURL *containerURL = [NSURL fileURLWithPath:containerPath];
         _userDefaults = [[NSUserDefaults alloc] _initWithSuiteName:nil container:containerURL];
         [_userDefaults registerDefaults:@{
-            @"DelayInSeconds": @5.0
+            @"LatestWallpaperContentsFilePath": @""
         }];
     });
     return _userDefaults;
