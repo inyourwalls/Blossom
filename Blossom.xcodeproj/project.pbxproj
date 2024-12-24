@@ -19,6 +19,8 @@
 		C191F6BC2D195C7C00855FBB /* VideoCropperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C191F6BB2D195C7C00855FBB /* VideoCropperViewController.swift */; };
 		C191F6BE2D195C8900855FBB /* VideoTrimmerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C191F6BD2D195C8900855FBB /* VideoTrimmerViewController.swift */; };
 		C191F6C22D19637A00855FBB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C191F6C12D19637A00855FBB /* Main.storyboard */; };
+		C191F6C42D1AC11000855FBB /* CropGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C191F6C32D1AC11000855FBB /* CropGuideView.swift */; };
+		C191F6C62D1AC4FC00855FBB /* UIImage+scalePreservingAspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = C191F6C52D1AC4FC00855FBB /* UIImage+scalePreservingAspectRatio.swift */; };
 		C1CFC8802CC069BE007F0CF9 /* Daemon.m in Sources */ = {isa = PBXBuildFile; fileRef = C1CFC87F2CC069BE007F0CF9 /* Daemon.m */; };
 		C1D0B90E2CC0336600F3F5E4 /* build.sh in Resources */ = {isa = PBXBuildFile; fileRef = C1D0B90D2CC0336600F3F5E4 /* build.sh */; };
 		C1D0B9132CC0371100F3F5E4 /* Wallpaper.m in Sources */ = {isa = PBXBuildFile; fileRef = C1D0B9122CC0371100F3F5E4 /* Wallpaper.m */; };
@@ -56,6 +58,8 @@
 		C191F6BB2D195C7C00855FBB /* VideoCropperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCropperViewController.swift; sourceTree = "<group>"; };
 		C191F6BD2D195C8900855FBB /* VideoTrimmerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTrimmerViewController.swift; sourceTree = "<group>"; };
 		C191F6C12D19637A00855FBB /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		C191F6C32D1AC11000855FBB /* CropGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropGuideView.swift; sourceTree = "<group>"; };
+		C191F6C52D1AC4FC00855FBB /* UIImage+scalePreservingAspectRatio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+scalePreservingAspectRatio.swift"; sourceTree = "<group>"; };
 		C1CFC87E2CC069AA007F0CF9 /* Daemon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Daemon.h; sourceTree = "<group>"; };
 		C1CFC87F2CC069BE007F0CF9 /* Daemon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Daemon.m; sourceTree = "<group>"; };
 		C1CFC8822CC07C5E007F0CF9 /* NSUserDefaults+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+Private.h"; sourceTree = "<group>"; };
@@ -134,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				C191F6B72D195B4200855FBB /* AVPlayer+isPlaying.swift */,
+				C191F6C52D1AC4FC00855FBB /* UIImage+scalePreservingAspectRatio.swift */,
 				C191F6BB2D195C7C00855FBB /* VideoCropperViewController.swift */,
 				C191F6BD2D195C8900855FBB /* VideoTrimmerViewController.swift */,
 				C191F6C12D19637A00855FBB /* Main.storyboard */,
@@ -187,6 +192,7 @@
 				C13796862CC18D76009AA80B /* LiveWallpaperEditorView.swift */,
 				C1301E962CC296F500EC6C20 /* SheetManager.swift */,
 				C106496F2D17EB7C00D2AC84 /* ConditionalNavigationView.swift */,
+				C191F6C32D1AC11000855FBB /* CropGuideView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -371,9 +377,11 @@
 				CC711D5F2B5BF5C6007235A6 /* MainApplication.mm in Sources */,
 				C1301E992CC29C6400EC6C20 /* WallpaperContents.swift in Sources */,
 				CC711D4B2B5BF5C6007235A6 /* RootViewController.mm in Sources */,
+				C191F6C62D1AC4FC00855FBB /* UIImage+scalePreservingAspectRatio.swift in Sources */,
 				CC711D642B5BF5C6007235A6 /* HUDApp.mm in Sources */,
 				C1D0B9132CC0371100F3F5E4 /* Wallpaper.m in Sources */,
 				C1301E972CC296F500EC6C20 /* SheetManager.swift in Sources */,
+				C191F6C42D1AC11000855FBB /* CropGuideView.swift in Sources */,
 				CC711D4D2B5BF5C6007235A6 /* MainApplicationDelegate.mm in Sources */,
 				CC711D602B5BF5C6007235A6 /* HUDRootViewController.mm in Sources */,
 				CC711D4E2B5BF5C6007235A6 /* HUDMainApplicationDelegate.mm in Sources */,

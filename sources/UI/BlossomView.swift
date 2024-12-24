@@ -133,6 +133,11 @@ struct BlossomView: View {
         .sheet(isPresented: $sheetManager.wallpaperSelector, content: {
             WallpaperSelectorModal(sheetManager: sheetManager)
         })
+        .onChange(of: sheetManager.cropGuide) { newValue in
+            if !sheetManager.cropGuide {
+                sheetManager.closeAll()
+            }
+        }
         .preferredColorScheme(.light)
     }
 }

@@ -101,6 +101,9 @@ struct LiveWallpaperEditorView: View {
                 )
             }
         }
+        .sheet(isPresented: $sheetManager.cropGuide, content: {
+            CropGuideView(sheetManager: sheetManager)
+        })
         .preferredColorScheme(.light)
     }
     
@@ -126,7 +129,66 @@ struct LiveWallpaperEditorView: View {
                         return
                     }
                     
-                    self.videoLoaded = true
+                    self.activeAlert = SheetAlert(
+                        title: "Blossom",
+                        message: "You can use in-app video editor or Apple's default Photos app to crop and trim the video.",
+                        primaryAction: {
+                            self.videoLoaded = true
+                        },
+                        secondaryAction: {
+                            if durationSeconds > 5.1 {
+                                self.sheetManager.cropGuide = true
+                                return
+                            }
+                            
+                            let track = videoAsset.tracks(withMediaType: AVMediaType.video).first!
+                            let size = track.naturalSize.applying(track.preferredTransform)
+
+                            let videoSize = CGSize(width: fabs(size.width), height: fabs(size.height))
+                            let screenWidth = UIScreen.main.bounds.size.width * UIScreen.main.scale
+                            let screenHeight = UIScreen.main.bounds.size.height * UIScreen.main.scale
+
+                            let videoAspectRatio = videoSize.width / videoSize.height
+                            let screenAspectRatio = screenWidth / screenHeight
+                            
+                            let generator = AVAssetImageGenerator(asset: player.currentItem!.asset)
+                            generator.requestedTimeToleranceBefore = CMTime.zero
+                            generator.requestedTimeToleranceAfter = CMTime.zero
+                            generator.appliesPreferredTrackTransform = true
+                            var image = try? generator.copyCGImage(at: player.currentItem!.asset.duration, actualTime: nil)
+                            
+                            if image == nil {
+                                activeAlert = SheetAlert(
+                                    title: "Error",
+                                    message: "Failed to extract last frame from your video.",
+                                    primaryAction: { self.sheetManager.closeAll() },
+                                    secondaryAction: nil,
+                                    primaryText: "OK",
+                                    secondaryText: nil
+                                )
+                                return
+                            }
+                            
+                            let uiImage = UIImage(cgImage: image!, scale: UIScreen.main.scale, orientation: .up)
+                            let scaledImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+                            
+                            if abs(videoAspectRatio - screenAspectRatio) > 0.01 {
+                                activeAlert = SheetAlert(
+                                    title: "Warning",
+                                    message: "The selected video file must have \(screenWidth)x\(screenHeight) resolution.\nYou can continue anyway, but the end result might look wrong.\nYou can also check the video guide about fixing this issue using default Photos app.",
+                                    primaryAction: { self.setWallpaper(videoAsset: player.currentItem!.asset, image: scaledImage)},
+                                    secondaryAction: { sheetManager.cropGuide = true },
+                                    primaryText: "Continue anyway",
+                                    secondaryText: "View guide"
+                                )
+                                return
+                            }
+                            
+                            self.setWallpaper(videoAsset: player.currentItem!.asset, image: scaledImage)
+                        },
+                        primaryText: "Use in-app editor",
+                        secondaryText: "Use default Photos app"
+                    )
                 }
             } catch {
                 print("Video loading error: \(error)")
