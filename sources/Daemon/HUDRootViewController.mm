@@ -60,12 +60,12 @@ static void LaunchServicesApplicationStateChanged
         
     });
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+        selector:@selector(screenBrightnessDidChange:)
+        name:UIScreenBrightnessDidChangeNotification
+        object:nil];
+    
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-            selector:@selector(screenBrightnessDidChange:)
-            name:UIScreenBrightnessDidChangeNotification
-            object:nil];
-        
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
         [[NSNotificationCenter defaultCenter] addObserver:self
             selector:@selector(deviceOrientationDidChange:)
