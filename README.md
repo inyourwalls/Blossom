@@ -2,6 +2,10 @@
   <img src="supports/icon.png" width="200" alt="Blossom">
 </p>
 
+# Update - March 2025
+
+Come take a look at [this guide](https://gist.github.com/MWRevamped/9161837f2bda90d13c7d24e285226691); they did a good job reverse engineering PosterBoard(system wallpaper process) garbage and this method supports all iOS versions past iOS 17; not to mention you can have seamlessly looping animation.
+
 # Blossom
 
 Live wallpapers for non-jailbroken iOS 17.0 with TrollStore.
