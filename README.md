@@ -2,9 +2,19 @@
   <img src="supports/icon.png" width="200" alt="Blossom">
 </p>
 
-# Update - March 2025
+# Notice - Read first
 
-Come take a look at [this guide](https://gist.github.com/MWRevamped/9161837f2bda90d13c7d24e285226691); they did a good job reverse engineering PosterBoard(system wallpaper process) garbage and this method supports all iOS versions past iOS 17; not to mention you can have seamlessly looping animation.
+This app is discontinued in favor of more recent developments, as they didn't exist when I was making this app.
+
+**As of now, use Nugget v5 by lemin!**
+
+----
+
+[Read this guide](https://gist.github.com/MWRevamped/9161837f2bda90d13c7d24e285226691) if you want to understand more.
+
+You can also get Mica app on Mac (Apple internal tool) to make your own custom wallpapers.
+
+*Dev note: While TrollStore edition would be very convinient, I don't use a device on iOS 17 anymore, so Blossom would probably not get any updates, but I might work on something else related to live wallpapers instead.*
 
 # Blossom
 
@@ -38,18 +48,6 @@ The live photo as a wallpaper feature this app uses was introduced in iOS 17.0.
 
 CoreTrust bug TrollStore uses was fixed on 17.0.1. This makes iOS 17.0 the only version this app is available on.
 
-#### Is there no way to get custom live wallpapers on later versions?
-
-Actually, there is. This app is just a convinient UI for replacing system files. You can replace the relevant files with `sparserestore` exploit (which was fixed too but the version range is way better).
-
-Check [this file](https://github.com/inyourwalls/Blossom/blob/main/sources/UI/LiveWallpaperEditorView.swift) and [this file](https://github.com/inyourwalls/Blossom/blob/main/sources/Wallpaper/Wallpaper.m) to see the relevant system files and how they are edited.
-
-To make wallpaper loop, crash the system `PhotosPosterProvider` process. That makes the "settling animation" replay itself.
-
-This is a side project of mine and I don't have any other device to check things. I also don't really plan on making other app to do this, so if anyone else wants to tackle this task, feel free to do so.
-
-I really don't understand why Apple made wallpapers suck so much as it's one of primary means of customization.
-
 ### I cannot create a new wallpaper
 
 If it looks like a crash whenever you try to select a photo for the wallpaper, disable "Loop" in the app and then you'll be able to create wallpapers again.
@@ -67,10 +65,6 @@ However, if you decide to loop the video, it will consume some additional batter
 ### My wallpaper is blank after respring
 
 The recommended filesize for a wallpaper is 7 megabytes. If the file size is larger, iOS might not load the video for some reason.
-
-### Can the video be longer than 5 seconds?
-
-No, that's a system limitation. This is not a tweak.
 
 ## Compiling
 
